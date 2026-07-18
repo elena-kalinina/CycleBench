@@ -30,3 +30,8 @@ outputs/**
 *.mov
 *.mp4
 .ipynb_checkpoints/
+
+# Local-only builder notes (never commit — judges see README only)
+INTERNAL_*.md
+internal/
+

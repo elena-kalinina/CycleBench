@@ -1,91 +1,109 @@
 # CycleBench
 
-**An open benchmark for reconstructing women's hormonal-state trajectories from scattered multimodal signals — plus SynthCycle, a privacy-safe synthetic cohort you can train on.**
+**Open AI infrastructure for women's hormonal health.**
 
-> Research-only. Not a diagnosis. Built solo at [Hack-Nation](https://hack-nation.ai) · Women's Hormonal Health challenge (MIT Clubs).
+CycleBench turns fragmented longitudinal signals — wearables, continuous glucose, sleep, symptoms, and intermittent labs — into a **reproducible research benchmark** for reconstructing hormonal-state trajectories over time. Alongside the benchmark we release **SynthCycle**: a privacy-safe synthetic cohort under an open license, so researchers can train and compare models without waiting on restricted clinical data access.
 
-**One sentence:** Point CycleBench at fragmented wearable, glucose, sleep, and symptom signals and it reconstructs an auditable hormonal-state trajectory — then publishes the schema, splits, baseline, evaluator, and an open synthetic cohort so the next researcher can improve it fairly.
+> **Research only.** CycleBench produces auditable research estimates. It is **not** a medical device, diagnosis, or treatment recommendation.
 
-## Why this exists
+Built solo at the Hack-Nation Global AI Hackathon · Challenge 05 — *Foundation Models for Women's Hormonal Health* (MIT Club of Northern California × MIT Club of Germany).
 
-Women's hormonal health lacks shared AI infrastructure (no ImageNet-style foundation). Care still sees **snapshots**; researchers cannot compare methods. CycleBench leaves behind a **reusable scientific asset**: a data contract, a leakage-safe benchmark, a simple baseline, and **SynthCycle** — a PHI-free cohort that is cleanly open-licensable even when PhysioNet-derived artifacts cannot be redistributed.
+---
 
-## The wow
+## The problem we address
 
-1. **Mess → trajectory:** five noisy streams snap into one uncertainty-aware timeline (observed vs inferred, receipts).
-2. **Proof:** the model can train **only on SynthCycle** and still be evaluated on held-out real data (**TSTR**). Headline metric in `outputs/latest_metrics.json`.
+Hormones shift continuously with sleep, stress, nutrition, and age — yet clinical care and most AI still see **occasional snapshots**. Women's hormonal physiology remains underrepresented in biomedical AI. Closing the women's health gap is estimated at more than **$1 trillion** in annual global economic impact; progress stalls without **shared datasets, benchmarks, and reproducible evaluation**.
 
-## Quick start (synthetic path — no PhysioNet required)
+CycleBench contributes one reusable layer: a **data contract + leakage-safe benchmark + baseline + open synthetic cohort + evaluation pipeline** that the next team can extend immediately.
+
+---
+
+## What we built
+
+| Layer | Deliverable | Why it matters |
+|---|---|---|
+| **Data contract** | Canonical daily multimodal schema + data dictionary | Interoperable foundation others can map into |
+| **SynthCycle** | Open, PHI-free synthetic longitudinal cohort + generator | Train and share without redistributing restricted patient data |
+| **Benchmark** | Masked multimodal reconstruction task, participant-level splits | One clear prediction problem with transparent methodology |
+| **Baseline** | Reproducible GBM + naive floor | A number others can beat — not a black box |
+| **Evaluation** | Metrics, calibration, Train-on-Synthetic / Test-on-Real (TSTR) harness | Scientific validation, not a polished UI alone |
+| **Demo** | Timeline: scattered streams → reconstructed trajectory with provenance | Makes the research asset *visible* |
+
+### The scientific task
+
+**Masked multimodal reconstruction:** from a trailing multimodal window (heart rate, HRV, activity, sleep, CGM, symptoms), reconstruct a held-out hormonal-state channel, evaluated on **held-out participants** (no person leaks across train/test).
+
+### Headline evaluation protocols
+
+| Protocol | Train | Test | Role |
+|---|---|---|---|
+| TSTS | SynthCycle | SynthCycle held-out | Always available, fully open |
+| **TSTR** | SynthCycle | Real held-out (e.g. mcPHASES) | Proves the open cohort is useful on real physiology |
+| TRTR | Real | Real held-out | Ceiling for comparison |
+
+Latest metrics: [`outputs/latest_metrics.json`](outputs/latest_metrics.json).
+
+---
+
+## How this matches a strong submission
+
+Mapped to the challenge brief (*What Makes a Strong Submission* + success criteria):
+
+| Strong submission asks for… | CycleBench delivers… |
+|---|---|
+| Publish reusable datasets, benchmarks, checkpoints, evaluation under an open license | **SynthCycle** (MIT, no PHI) + schema, splits, baseline artifact, evaluator, cards |
+| Solve **one** clearly defined prediction/infrastructure problem with transparent methods | Single task: masked multimodal reconstruction; documented splits, metrics, leakage checks |
+| Share reproducible code so others can extend the work | One-command generate + evaluate; DATA / BENCHMARK / MODEL cards |
+| Avoid unsupported diagnostic claims / UI without validation | Explicit research-only framing; metrics vs naive baseline; provenance on outputs |
+| **Women's Health Impact** | Infrastructure for continuous hormonal understanding — relevant to cycle, menopause, and underdiagnosed conditions affecting hundreds of millions |
+| **Technical Excellence** | Participant-safe splits, missingness reporting, calibration, TSTR vs TRTR vs naive |
+| **Foundation Value** | Leaves open assets that outlive the weekend — not an isolated app |
+
+We deliberately did **not** ship a consumer wellness wrapper. The demo exists to *show* the benchmark working — the product is the scientific asset.
+
+---
+
+## Try it (reproduce in minutes)
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-python scripts/smoke.py              # must stay green
-python scripts/generate_synth.py     # open cohort → data/synthetic/
+python scripts/generate_synth.py     # open SynthCycle cohort
 python scripts/run_benchmark.py      # metrics → outputs/latest_metrics.json
+python scripts/smoke.py              # integrity checks
 
-# timeline demo
-open demo/index.html                 # or: python -m http.server 8000  (from repo root)
+# Demo timeline
+open demo/index.html
+# or: python -m http.server 8000   then visit /demo/
 ```
 
-## Repo map
+No PhysioNet credentials required for the open path. Real-data TSTR uses publicly documented sources (e.g. [mcPHASES on PhysioNet](https://physionet.org/content/mcphases)) under their terms — derived patient rows are **not** redistributed unless upstream licensing permits.
+
+---
+
+## Repository layout
 
 ```
-cyclebench/
-  data_contract/   # canonical daily schema + dictionary
-  adapters/        # mcPHASES adapter (wire when download lands)
-  preprocess/      # participant-safe splits, missingness
-  synthcycle/      # open synthetic generator  ← redistributable
-  benchmark/       # windowed masked-reconstruction task
-  baselines/       # GBM + naive floor
-  evaluation/      # metrics, TSTR harness
-  ingest/          # symptom text → structured features (OpenAI optional)
-cards/             # DATA / BENCHMARK / MODEL cards
-demo/              # timeline viewer
-scripts/           # smoke · generate_synth · run_benchmark
+cyclebench/          Core library (schema, SynthCycle, benchmark, baselines, evaluation)
+cards/               DATA_CARD · BENCHMARK · MODEL_CARD
+demo/                Trajectory viewer (observed vs inferred + receipts)
+scripts/             generate_synth · run_benchmark · smoke
+outputs/             Latest metrics and demo artifacts
 ```
 
-## Task (locked)
+---
 
-**Masked multimodal reconstruction** of a held-out hormonal-state channel from a trailing 7-day window, evaluated on **held-out participants**.
+## Multimodal & responsible design
 
-Default synthetic target: `cycle_phase`. Target is finalized after mcPHASES density inspection — the evaluator is **target-agnostic**.
+- **Modalities:** wearable physiology, CGM, sleep, structured symptoms (optional free-text → structured features via OpenAI or an offline heuristic — **ingestion only**, never labels or metrics).
+- **Uncertainty & missingness** are first-class; observed vs model-inferred values are labeled in the demo.
+- **No clinical claims.** Intended use, limitations, and failure modes: [`cards/MODEL_CARD.md`](cards/MODEL_CARD.md).
 
-## Protocols
+---
 
-| Name | Train | Test |
-|---|---|---|
-| TSTS | SynthCycle | SynthCycle held-out |
-| **TSTR** (headline) | SynthCycle | real held-out |
-| TRTR (ceiling) | real | real held-out |
-
-## mcPHASES
-
-Place the extracted PhysioNet package at `data/raw/mcphases/`, then:
-
-```bash
-python -c "from cyclebench.adapters.mcphases import inspect; import json; print(json.dumps(inspect(), indent=2))"
-```
-
-Implement column mapping in `cyclebench/adapters/mcphases.py::adapt()`, then:
-
-```bash
-python scripts/run_benchmark.py --real data/processed/mcphases_daily.parquet
-```
-
-**License honesty:** claim an open license on real-derived artifacts only after upstream DUA review. SynthCycle is MIT either way.
-
-## Responsible design
-
-- Calibrated / uncertainty-aware research estimates — **not** diagnostic claims
-- Provenance on every displayed value
-- OpenAI (if used) is ingestion-only: never labels, never metrics
-
-## Author
+## Author & license
 
 Architected and built **solo** for Hack-Nation 2026.
 
-## License
-
-MIT for code + SynthCycle. See `LICENSE` and `cards/DATA_CARD.md`.
+**MIT** for code and SynthCycle. See [`LICENSE`](LICENSE) and [`cards/DATA_CARD.md`](cards/DATA_CARD.md). Real clinical data remains under its upstream license and access rules.
