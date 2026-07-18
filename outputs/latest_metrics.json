@@ -6,46 +6,46 @@
     "note": "Research-only. Not a diagnosis."
   },
   "splits": {
-    "train": 24,
-    "val": 8,
-    "test": 8
+    "train": 14,
+    "val": 5,
+    "test": 5
   },
   "missingness_synth": {
-    "n_rows": 1800,
-    "n_participants": 40,
+    "n_rows": 840,
+    "n_participants": 24,
     "per_column_missing_rate": {
-      "hr_mean": 0.08722222222222223,
-      "hrv_rmssd": 0.08,
-      "steps": 0.07611111111111112,
-      "sleep_hours": 0.07777777777777778,
-      "sleep_efficiency": 0.07833333333333334,
-      "cgm_mean": 0.07055555555555555,
-      "cgm_std": 0.09,
-      "symptom_fatigue": 0.08944444444444444,
-      "symptom_mood": 0.08055555555555556,
-      "symptom_pain": 0.07555555555555556
+      "hr_mean": 0.08571428571428572,
+      "hrv_rmssd": 0.06666666666666667,
+      "steps": 0.06190476190476191,
+      "sleep_hours": 0.06547619047619048,
+      "sleep_efficiency": 0.08214285714285714,
+      "cgm_mean": 0.06785714285714285,
+      "cgm_std": 0.08928571428571429,
+      "symptom_fatigue": 0.07738095238095238,
+      "symptom_mood": 0.07738095238095238,
+      "symptom_pain": 0.08333333333333333
     },
-    "mean_missing_rate": 0.08055555555555557
+    "mean_missing_rate": 0.07571428571428572
   },
   "tsts": {
     "kind": "categorical",
-    "n": 312,
-    "macro_f1": 0.6600383471213837,
-    "balanced_accuracy": 0.6368634896177269,
-    "accuracy": 0.7051282051282052,
-    "ece": 0.0883390659642858
+    "n": 145,
+    "macro_f1": 0.6565865782932891,
+    "balanced_accuracy": 0.638070263070263,
+    "accuracy": 0.7586206896551724,
+    "ece": 0.09761928079468415
   },
   "naive_tsts": {
     "kind": "categorical",
-    "n": 312,
-    "macro_f1": 0.15714285714285714,
+    "n": 145,
+    "macro_f1": 0.15639810426540285,
     "balanced_accuracy": 0.25,
-    "accuracy": 0.4583333333333333
+    "accuracy": 0.45517241379310347
   },
   "delta_tsts": {
-    "delta_macro_f1": 0.5028954899785265,
-    "delta_balanced_accuracy": 0.3868634896177269,
-    "delta_accuracy": 0.24679487179487186
+    "delta_macro_f1": 0.5001884740278864,
+    "delta_balanced_accuracy": 0.38807026307026304,
+    "delta_accuracy": 0.3034482758620689
   },
   "tstr": null,
   "trtr": null,
@@ -53,12 +53,12 @@
   "headline": {
     "primary_metric": "balanced_accuracy",
     "protocol": "TSTS",
-    "tstr": 0.6368634896177269,
+    "tstr": 0.638070263070263,
     "naive": 0.25,
     "trtr": null,
-    "beats_naive": 0.3868634896177269,
+    "beats_naive": 0.38807026307026304,
     "pct_of_trtr": null,
-    "headline": "TSTS balanced_accuracy=0.637 (+0.387 vs naive)"
+    "headline": "TSTS balanced_accuracy=0.638 (+0.388 vs naive)"
   },
   "mode": "TSTS_synth_only"
 }
