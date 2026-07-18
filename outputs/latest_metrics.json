@@ -1,0 +1,64 @@
+{
+  "task": {
+    "name": "masked_multimodal_reconstruction",
+    "target": "cycle_phase",
+    "kind": "categorical",
+    "note": "Research-only. Not a diagnosis."
+  },
+  "splits": {
+    "train": 24,
+    "val": 8,
+    "test": 8
+  },
+  "missingness_synth": {
+    "n_rows": 1800,
+    "n_participants": 40,
+    "per_column_missing_rate": {
+      "hr_mean": 0.08722222222222223,
+      "hrv_rmssd": 0.08,
+      "steps": 0.07611111111111112,
+      "sleep_hours": 0.07777777777777778,
+      "sleep_efficiency": 0.07833333333333334,
+      "cgm_mean": 0.07055555555555555,
+      "cgm_std": 0.09,
+      "symptom_fatigue": 0.08944444444444444,
+      "symptom_mood": 0.08055555555555556,
+      "symptom_pain": 0.07555555555555556
+    },
+    "mean_missing_rate": 0.08055555555555557
+  },
+  "tsts": {
+    "kind": "categorical",
+    "n": 312,
+    "macro_f1": 0.6600383471213837,
+    "balanced_accuracy": 0.6368634896177269,
+    "accuracy": 0.7051282051282052,
+    "ece": 0.0883390659642858
+  },
+  "naive_tsts": {
+    "kind": "categorical",
+    "n": 312,
+    "macro_f1": 0.15714285714285714,
+    "balanced_accuracy": 0.25,
+    "accuracy": 0.4583333333333333
+  },
+  "delta_tsts": {
+    "delta_macro_f1": 0.5028954899785265,
+    "delta_balanced_accuracy": 0.3868634896177269,
+    "delta_accuracy": 0.24679487179487186
+  },
+  "tstr": null,
+  "trtr": null,
+  "naive_real": null,
+  "headline": {
+    "primary_metric": "balanced_accuracy",
+    "protocol": "TSTS",
+    "tstr": 0.6368634896177269,
+    "naive": 0.25,
+    "trtr": null,
+    "beats_naive": 0.3868634896177269,
+    "pct_of_trtr": null,
+    "headline": "TSTS balanced_accuracy=0.637 (+0.387 vs naive)"
+  },
+  "mode": "TSTS_synth_only"
+}

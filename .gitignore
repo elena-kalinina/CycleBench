@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.DS_Store
+
+# Data — never commit real mcPHASES / PHI
+data/raw/**
+!data/raw/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+
+# Keep a small synthetic sample in-repo; large synth releases go to HF/releases
+data/synthetic/*.parquet
+data/synthetic/*.csv
+!data/synthetic/.gitkeep
+!data/synthetic/sample_manifest.json
+
+# Outputs (metrics JSONs can be committed selectively)
+outputs/**
+!outputs/.gitkeep
+!outputs/latest_metrics.json
+
+# IDE / OS
+.idea/
+.vscode/
+*.mov
+*.mp4
+.ipynb_checkpoints/

@@ -1,0 +1,17 @@
+{
+  "name": "SynthCycle",
+  "n_participants": 40,
+  "n_rows": 1800,
+  "days_span": 45,
+  "fitted_from": "default_physiology_priors",
+  "missing_rate_target": 0.08,
+  "observed_missing_rate": 0.08055555555555557,
+  "phases": [
+    "menstrual",
+    "follicular",
+    "ovulatory",
+    "luteal"
+  ],
+  "license": "MIT \u2014 synthetic, no PHI",
+  "seed": 42
+}

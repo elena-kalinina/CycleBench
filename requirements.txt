@@ -1,0 +1,11 @@
+numpy>=1.26
+pandas>=2.1
+scikit-learn>=1.4
+scipy>=1.11
+pyarrow>=14.0
+matplotlib>=3.8
+joblib>=1.3
+tqdm>=4.66
+python-dotenv>=1.0
+# Optional multimodal ingestion (symptom text → structured features)
+# openai>=1.40
