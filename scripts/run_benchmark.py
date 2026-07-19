@@ -173,25 +173,68 @@ def main() -> None:
     args.out.write_text(json.dumps(report, indent=2))
 
     joblib.dump(model, OUTPUTS_DIR / "baseline.joblib")
-    # Public demo: always a SYNTHETIC participant (never real mcp_*)
-    demo_pid = participant_splits(synth_train, seed=SEED)["test"][0]
-    demo_df = filter_split(synth_train, [demo_pid]).copy()
-    if args.target == "cycle_phase":
-        X_demo, y_demo, meta_demo = build_windows(demo_df, target=args.target)
-        if len(X_demo):
-            pred_demo = model.predict(X_demo)
-            meta_demo = meta_demo.copy()
-            meta_demo["y_true"] = y_demo
-            meta_demo["y_pred"] = pred_demo
-            meta_demo["status"] = "inferred"
-            meta_demo.to_csv(OUTPUTS_DIR / "demo_predictions.csv", index=False)
+
+    # Public demo: several SYNTHETIC participants (never real mcp_*) so the UI
+    # can pick a fresh person on each Reconstruct press.
+    def _records(df: pd.DataFrame, n: int = 28) -> list[dict]:
+        return json.loads(df.head(n).to_json(orient="records", date_format="iso"))
+
+    demo_pids = list(participant_splits(synth_train, seed=SEED)["test"][:12])
+    if len(demo_pids) < 8:
+        # Fall back to any synth IDs if the test split is tiny
+        all_pids = list(synth_train["participant_id"].unique())
+        demo_pids = all_pids[:12]
+
+    participants: list[dict] = []
+    for pid in demo_pids:
+        pdf = filter_split(synth_train, [pid]).copy()
+        entry: dict = {
+            "participant_id": pid,
+            "streams": _records(pdf),
+            "predictions": [],
+        }
+        if args.target == "cycle_phase":
+            X_demo, y_demo, meta_demo = build_windows(pdf, target=args.target)
+            if len(X_demo):
+                pred_demo = model.predict(X_demo)
+                meta_demo = meta_demo.copy()
+                meta_demo["y_true"] = y_demo
+                meta_demo["y_pred"] = pred_demo
+                proba = model.predict_proba(X_demo)
+                meta_demo["confidence"] = proba.max(axis=1) if proba is not None else 0.0
+                meta_demo["status"] = "inferred"
+                entry["predictions"] = _records(meta_demo, n=len(meta_demo))
+        participants.append(entry)
+
+    # Keep single-person fields for backward compatibility (first in pool)
+    demo0 = participants[0]
+    demo_df = filter_split(synth_train, [demo0["participant_id"]]).copy()
+    if demo0["predictions"]:
+        pd.DataFrame(demo0["predictions"]).to_csv(OUTPUTS_DIR / "demo_predictions.csv", index=False)
     demo_df.to_csv(OUTPUTS_DIR / "demo_timeline.csv", index=False)
 
-    # Public JSON for Lovable / video (synthetic only + aggregate metrics)
+    ablations = []
+    abl_path = OUTPUTS_DIR / "ablation.json"
+    if abl_path.exists():
+        raw = json.loads(abl_path.read_text())
+        for row in raw.get("ablations") or []:
+            tstr = row.get("tstr") or {}
+            ablations.append({
+                "name": row.get("ablation"),
+                "balanced_accuracy": tstr.get("balanced_accuracy"),
+                "macro_f1": tstr.get("macro_f1"),
+                "ece": tstr.get("ece"),
+            })
+
     public = {
-        "disclaimer": "Research only — not a diagnosis. Demo participant is synthetic (SynthCycle). Restricted clinical rows are not redistributed.",
-        "participant_id": demo_pid,
-        "streams": demo_df.head(28).to_dict(orient="records"),
+        "disclaimer": "Research only — not a diagnosis. Demo participants are synthetic (SynthCycle). Restricted clinical rows are not redistributed.",
+        "participant_id": demo0["participant_id"],
+        "streams": demo0["streams"],
+        "predictions": demo0["predictions"],
+        "participants": participants,
+        "synth_n_participants": int(synth_train["participant_id"].nunique()),
+        "synth_days": int(synth_train.groupby("participant_id").size().median()),
+        "synth_missing_rate": 0.08,
         "metrics": {
             "protocol": protocol,
             "headline": headline.get("headline"),
@@ -200,21 +243,22 @@ def main() -> None:
             "trtr": headline.get("trtr"),
             "beats_naive": headline.get("beats_naive"),
             "pct_of_trtr": headline.get("pct_of_trtr"),
+            "macro_f1": (tstr or tsts or {}).get("macro_f1") if isinstance(tstr or tsts, dict) else None,
+            "ece": (tstr or tsts or {}).get("ece") if isinstance(tstr or tsts, dict) else None,
         },
+        "ablations": ablations,
         "split_real": report["splits_real"],
         "model_version": "baseline.joblib",
+        "model_name": "GradientBoostingClassifier",
+        "model_meta": "sklearn · depth 3 · 80 trees · median impute",
         "synth_fitted_from": fitted_from,
     }
-    if (OUTPUTS_DIR / "demo_predictions.csv").exists():
-        public["predictions"] = pd.read_csv(OUTPUTS_DIR / "demo_predictions.csv").head(28).to_dict(
-            orient="records"
-        )
-    (OUTPUTS_DIR / "demo_public.json").write_text(json.dumps(public, indent=2, default=str))
+    (OUTPUTS_DIR / "demo_public.json").write_text(json.dumps(public, indent=2, allow_nan=False))
 
     print(json.dumps(headline, indent=2))
     print(f"wrote {args.out}")
     print(f"mode={report['mode']}")
-    print(f"demo_public={OUTPUTS_DIR / 'demo_public.json'}")
+    print(f"demo_public={OUTPUTS_DIR / 'demo_public.json'} ({len(participants)} participants)")
 
 
 if __name__ == "__main__":

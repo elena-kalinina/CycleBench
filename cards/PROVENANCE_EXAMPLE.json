@@ -1,0 +1,14 @@
+{
+  "schema": "cyclebench_daily_v1",
+  "source_name": "SynthCycle",
+  "adapter": "cyclebench.synthcycle.generator",
+  "license_tag": "MIT-synthetic-no-PHI",
+  "redistributable": true,
+  "n_rows": 7200,
+  "n_participants": 120,
+  "created_at_utc": "2026-07-19T00:00:00+00:00",
+  "note": "Example provenance manifest for the open SynthCycle cohort. mcPHASES adaptations write an analogous LOCAL-ONLY manifest next to data/processed/mcphases_daily.parquet (gitignored).",
+  "extra": {
+    "workflow": "source adapter (or generator) → canonical daily timeline → provenance manifest → participant-safe splits → baseline → evaluator"
+  }
+}

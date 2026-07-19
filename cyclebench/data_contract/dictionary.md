@@ -23,8 +23,17 @@ Grain: one row per participant per calendar day.
 
 ## Missingness
 
-Missing values are allowed and **must be preserved** (not silently imputed in the released timeline).
-Imputation, if any, happens inside the baseline and is reported in the evaluation.
+**Observation fields** = the numeric / categorical columns above (hr_mean, cgm_mean, …).
+**Missingness** is first-class: a missing observation is stored as `NaN` / null in the released
+timeline — there is no silent fill. That is intentional (not a parallel `*_mask` column set):
+
+- Released timelines preserve gaps so missingness is auditable.
+- `missingness_report()` summarizes per-column rates for every split.
+- Imputation happens **only inside** the baseline pipeline (median imputer) at train/predict
+  time, and is documented in the model card — never in the published daily table.
+
+Demo / status tags use `observed` | `inferred` | `missing` for research-state display only;
+they are not separate schema columns.
 
 ## Licensing
 

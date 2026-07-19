@@ -27,15 +27,26 @@
       line-height: 1.45;
     }
     header {
-      padding: 28px 32px 16px;
+      padding: 28px 32px 18px;
       border-bottom: 1px solid var(--line);
     }
     header h1 {
-      margin: 0 0 6px;
+      margin: 0 0 8px;
       font-size: 32px;
       letter-spacing: -0.03em;
     }
-    header p { margin: 0; color: var(--muted); max-width: 46rem; font-size: 15px; }
+    header .lede {
+      margin: 0 0 12px;
+      color: var(--ink);
+      max-width: 52rem;
+      font-size: 17px;
+    }
+    header .sub {
+      margin: 0;
+      color: var(--muted);
+      max-width: 52rem;
+      font-size: 14px;
+    }
     main { padding: 20px 32px 56px; display: grid; gap: 18px; max-width: 1100px; }
     .row { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 18px; }
     @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
@@ -46,25 +57,98 @@
       padding: 16px 18px;
     }
     section h2 {
-      margin: 0 0 12px;
+      margin: 0 0 8px;
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
       font-family: ui-sans-serif, system-ui, sans-serif;
     }
+    .hint {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 44rem;
+    }
+    .story {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+    .story strong { color: var(--ink); }
+    .bridge {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 10px;
+      align-items: stretch;
+      margin: 4px 0 8px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+    }
+    @media (max-width: 700px) {
+      .bridge { grid-template-columns: 1fr; }
+      .bridge .arrow { display: none; }
+    }
+    .bridge .step {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .bridge .step .n {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .bridge .step b { display: block; font-size: 14px; margin-bottom: 4px; }
+    .bridge .step p { margin: 0; color: var(--muted); line-height: 1.4; }
+    .bridge .arrow {
+      align-self: center;
+      color: var(--accent);
+      font-size: 22px;
+      font-weight: 600;
+    }
     .badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
-      padding: 2px 8px;
+      padding: 3px 9px;
       border-radius: 999px;
       border: 1px solid var(--line);
-      margin-right: 6px;
+      margin: 0 6px 6px 0;
       font-family: ui-sans-serif, system-ui, sans-serif;
     }
     .badge.observed { background: #ecfdf5; color: var(--accent); }
     .badge.inferred { background: #fff7ed; color: var(--warn); }
     .badge.missing { background: #f5f5f4; color: var(--miss); }
+    .swatch {
+      width: 10px; height: 10px; border-radius: 50%;
+      display: inline-block; flex-shrink: 0;
+    }
+    .swatch.solid { background: var(--accent); }
+    .swatch.ring {
+      background: transparent;
+      border: 2px dashed var(--warn);
+      box-sizing: border-box;
+    }
+    .swatch.gap {
+      background: transparent;
+      border: 1.5px solid var(--miss);
+      position: relative;
+    }
+    .swatch.gap::after {
+      content: "";
+      position: absolute;
+      left: 50%; top: -2px; bottom: -2px;
+      width: 1.5px; background: var(--miss);
+      transform: translateX(-50%) rotate(45deg);
+    }
     button {
       font: inherit;
       background: var(--accent);
@@ -115,102 +199,680 @@
     .card {
       border: 1px dashed var(--line);
       border-radius: 8px;
-      padding: 8px 10px;
+      padding: 10px 12px;
       background: #fff;
     }
-    .card strong { display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
-    .spark { width: 100%; height: 36px; display: block; }
-    #timelineWrap { position: relative; min-height: 220px; }
-    #timelineChart { width: 100%; height: 180px; }
-    #timelineList { font-family: ui-monospace, Menlo, monospace; font-size: 11px; margin-top: 10px; max-height: 160px; overflow: auto; }
-    .day { display: grid; grid-template-columns: 88px 1fr; gap: 8px; padding: 3px 0; border-bottom: 1px dashed var(--line); }
+    .card .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+      margin-bottom: 2px;
+    }
+    .card .topline strong {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .card .topline .gaps {
+      font-size: 11px;
+      color: var(--miss);
+      white-space: nowrap;
+    }
+    .card .why {
+      margin: 0 0 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .spark { width: 100%; height: 40px; display: block; }
+    #timelineWrap { position: relative; min-height: 240px; }
+    #timelineChart { width: 100%; height: 220px; display: block; }
+    #timelineEmpty {
+      display: none;
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      padding: 28px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      background: #fff;
+    }
+    #timelineEmpty.show { display: block; }
+    #timelineEmpty b { color: var(--ink); }
+    #timelineList {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 11px;
+      margin-top: 10px;
+      max-height: 160px;
+      overflow: auto;
+    }
+    .day {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 8px;
+      padding: 3px 0;
+      border-bottom: 1px dashed var(--line);
+    }
     .fade-in { animation: fade 0.7s ease; }
     @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
-    .proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; }
-    .proof-grid div { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
-    .proof-grid b { display: block; font-size: 18px; margin-top: 4px; }
+    .bars {
+      margin: 14px 0 12px;
+      display: grid;
+      gap: 10px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 88px 1fr 44px;
+      gap: 8px;
+      align-items: center;
+    }
+    .bar-row .lab { color: var(--muted); line-height: 1.2; }
+    .bar-track {
+      height: 18px;
+      background: #f0ebe4;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      min-width: 2px;
+    }
+    .bar-fill.naive { background: #d6d3d1; }
+    .bar-fill.tstr { background: var(--accent); }
+    .bar-fill.trtr { background: #57534e; }
+    .bar-row .val { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 4px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 11px;
+    }
+    .flow .chip {
+      flex: 1;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .flow .chip b { display: block; font-size: 13px; margin-bottom: 2px; color: var(--ink); }
+    .flow .chip span { color: var(--muted); line-height: 1.25; }
+    .flow .arr { color: var(--accent); font-size: 16px; flex-shrink: 0; }
+    .model-tag {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px 12px;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    .model-tag .model-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .model-tag .model-meta {
+      font-size: 11px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .split-note {
+      margin-top: 12px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .split-note b { color: var(--ink); }
+    .ablation-wrap { margin-top: 14px; }
+    .ablation-title {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .ablation-bars {
+      display: grid;
+      gap: 6px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 11px;
+    }
+    .ablation-bars .arow {
+      display: grid;
+      grid-template-columns: 72px 1fr 40px;
+      gap: 6px;
+      align-items: center;
+      color: var(--muted);
+    }
+    .ablation-bars .atrack {
+      height: 10px;
+      background: #f0ebe4;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .ablation-bars .afill {
+      height: 100%;
+      background: #0f766e;
+      border-radius: 4px;
+      opacity: 0.85;
+    }
+    .ablation-bars .aval {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .includes {
+      margin: 0;
+      padding-left: 1.2em;
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 48rem;
+    }
+    .includes li {
+      margin: 8px 0;
+      padding-left: 4px;
+    }
+    .includes li::marker {
+      color: var(--accent);
+    }
+    .synth-panel {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    @media (max-width: 800px) { .synth-panel { grid-template-columns: 1fr; } }
+    .synth-hero {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .synth-hero .brand {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .synth-hero h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+    .synth-hero p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .synth-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    .synth-stats div {
+      background: #f7f4ef;
+      border-radius: 8px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .synth-stats b {
+      display: block;
+      font-size: 18px;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+    .synth-stats span {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .do-dont {
+      display: grid;
+      gap: 8px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 13px;
+    }
+    .do-dont .box {
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .do-dont .box.yes { border-color: #99f6e4; background: #f0fdfa; }
+    .do-dont .box.no { border-color: #e7e5e4; background: #fafaf9; }
+    .do-dont .box .tag {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .do-dont .box.yes .tag { color: var(--accent); }
+    .do-dont .box.no .tag { color: var(--miss); }
+    .do-dont ul {
+      margin: 0;
+      padding-left: 1.1em;
+      color: var(--muted);
+    }
+    .do-dont li { margin: 3px 0; }
+    .do-dont li b { color: var(--ink); font-weight: 600; }
+    .recipe {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    @media (max-width: 900px) { .recipe { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .recipe { grid-template-columns: 1fr; } }
+    .recipe .step {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      position: relative;
+    }
+    .recipe .step .n {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .recipe .step b {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+    .recipe .step p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .guard {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+    }
+    .guard span {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      color: var(--muted);
+    }
+    .guard span em {
+      font-style: normal;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .pid-line {
+      margin: 0 0 10px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .pid-line b {
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>CycleBench</h1>
-    <p>
-      Fragmented wearable, glucose, sleep, and symptom signals → one auditable hormonal-state trajectory.
-      Research infrastructure only — not a diagnosis. Demo participant is <b>synthetic (SynthCycle)</b>.
+    <p class="lede">
+      Hormone labs are rare. Wearables are daily. We turn everyday signals —
+      heart rate, glucose, sleep, symptoms — into a day-by-day estimate of
+      <b>where someone is in their menstrual cycle</b>, so researchers can build
+      and compare AI fairly.
+    </p>
+    <p class="sub">
+      Research infrastructure only — not a diagnosis or medical advice.
+      Everything on this page is a <b>SynthCycle</b> participant (fake, open, no patient data).
     </p>
   </header>
   <main>
-    <div class="row">
-      <section>
-        <h2>1 · Fragmented inputs</h2>
-        <div class="cards" id="streams">Loading demo_public.json…</div>
-        <p style="margin-top:14px">
-          <button id="btn">Reconstruct trajectory</button>
-          <button class="ghost" id="resetBtn" type="button">Reset</button>
-        </p>
-        <p class="disclaimer" style="margin-top:8px">Video path: press Reconstruct → watch the snap → read the TSTR proof card.</p>
-      </section>
-      <section>
-        <h2>Benchmark proof</h2>
-        <div class="metric" id="headline">—<span>loading metrics…</span></div>
-        <div class="proof-grid" id="proof"></div>
-        <p class="disclaimer" id="mode" style="margin-top:10px"></p>
-      </section>
-    </div>
     <section>
-      <h2>2 · Reconstructed trajectory</h2>
-      <p>
-        <span class="badge observed">observed phase</span>
-        <span class="badge inferred">model-inferred</span>
-        <span class="badge missing">gap</span>
-      </p>
-      <div id="timelineWrap">
-        <svg id="timelineChart" viewBox="0 0 640 180" preserveAspectRatio="none"></svg>
-        <div id="timelineList">Press Reconstruct.</div>
+      <h2>How the pieces connect</h2>
+      <div class="bridge">
+        <div class="step">
+          <div class="n">Step 1</div>
+          <b>Messy daily signals</b>
+          <p>Heart, sleep, glucose, fatigue — cheap, continuous, full of gaps.</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+          <div class="n">Step 2</div>
+          <b>Model reads the pattern</b>
+          <p>Trained on SynthCycle (open). Guessing cycle phase from those signals.</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+          <div class="n">Step 3</div>
+          <b>Cycle-phase timeline</b>
+          <p>One clear research estimate: menstrual / follicular / ovulatory / luteal.</p>
+        </div>
       </div>
     </section>
+
     <section>
-      <h2>3 · Receipt drawer</h2>
+      <h2>SynthCycle — how we built the open cohort</h2>
+      <div class="synth-panel">
+        <div class="synth-hero">
+          <div class="brand">Open release · MIT · no PHI · not copied patient rows</div>
+          <h3 id="synthHeroTitle">120 × 60 synthetic days — open cohort anyone can download</h3>
+          <p id="synthHeroBody">
+            Restricted clinical data can’t be redistributed. We generate full day-by-day timelines
+            (signals + phase labels + gaps) so the next lab can train and compare models without
+            waiting on hospital paperwork.
+          </p>
+          <div class="synth-stats" id="synthStats">
+            <div><b>120</b><span>synthetic people</span></div>
+            <div><b>60</b><span>days each</span></div>
+            <div><b>~8%</b><span>gaps on purpose</span></div>
+          </div>
+        </div>
+        <div class="do-dont">
+          <div class="box yes">
+            <div class="tag">What we publish</div>
+            <ul>
+              <li><b>SynthCycle</b> — full fake timelines + phase labels</li>
+              <li><b>Generator code</b> — seed 42, reproducible</li>
+              <li><b>Aggregate metrics</b> — TSTR on real held-out people</li>
+            </ul>
+          </div>
+          <div class="box no">
+            <div class="tag">What we never publish</div>
+            <ul>
+              <li>Raw or derived <b>mcPHASES patient rows</b></li>
+              <li>Anything from the <b>real test split</b> in the generator</li>
+              <li>Diagnoses or clinical advice</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe">
+        <div class="step">
+          <div class="n">1 · Fit (train only)</div>
+          <b>Learn from mcPHASES train</b>
+          <p>25 real train people. Per cycle phase: mean + std of each wearable/CGM/sleep/symptom, plus a covariance matrix (signals that move together).</p>
+        </div>
+        <div class="step">
+          <div class="n">2 · Sample</div>
+          <b>Draw 120 new people</b>
+          <p>Each day: multivariate normal draw from that phase’s mean + covariance. Clip to physiological ranges. Smooth slightly day-to-day.</p>
+        </div>
+        <div class="step">
+          <div class="n">3 · Label</div>
+          <b>Phase from calendar rule</b>
+          <p>Day-in-cycle → menstrual / follicular / ovulatory / luteal. Labels are <em>not</em> from the Gradient Boosting model.</p>
+        </div>
+        <div class="step">
+          <div class="n">4 · Mess</div>
+          <b>~8% holes on purpose</b>
+          <p>We delete values at random so the open cohort looks as gappy as real life. Gaps stay empty in the demo — not imputed for display.</p>
+        </div>
+      </div>
+
+      <div class="guard" id="synthGuard">
+        <span><em>Fitted from</em> mcPHASES train stats (correlated)</span>
+        <span><em>Leakage guard</em> test people never enter the generator</span>
+        <span><em>License</em> MIT synthetic · upstream clinical stays restricted</span>
+      </div>
+    </section>
+
+    <div class="row">
+      <section>
+        <h2>1 · What we see every day (the mess)</h2>
+        <p class="hint">
+          One <b>SynthCycle</b> participant sampled as above.
+          Each <b>Reconstruct</b> draws a <b>different random person</b> from the open cohort pool.
+          Streams look unrelated to “hormones” — that is the point. Breaks in each line are intentional missing days.
+        </p>
+        <p class="pid-line" id="pidLine">Participant: —</p>
+        <div class="cards" id="streams">Loading demo_public.json…</div>
+        <p style="margin-top:14px">
+          <button id="btn">Reconstruct cycle timeline</button>
+          <button class="ghost" id="resetBtn" type="button">Reset</button>
+        </p>
+        <p class="disclaimer" style="margin-top:8px">
+          Press the button → Gradient Boosting (trained on SynthCycle) uses the last week of these signals to guess cycle phase.
+        </p>
+      </section>
+      <section>
+        <h2>Open data → real-world score</h2>
+        <div class="flow" id="flow">
+          <div class="chip"><b>SynthCycle</b><span>train (open)</span></div>
+          <div class="arr">→</div>
+          <div class="chip"><b>GBM model</b><span>learns patterns</span></div>
+          <div class="arr">→</div>
+          <div class="chip"><b>Real people</b><span>held-out test</span></div>
+        </div>
+        <div class="model-tag" id="modelTag">
+          <span class="model-name">Gradient Boosting</span>
+          <span class="model-meta">sklearn · depth 3 · 80 trees · median impute at train/predict only</span>
+        </div>
+        <div class="metric" id="headline" style="margin-top:12px">—<span></span></div>
+        <div class="bars" id="bars"></div>
+        <div class="ablation-wrap" id="ablationWrap" style="display:none">
+          <div class="ablation-title">Modality ablations (TSTR bal. acc.)</div>
+          <div class="ablation-bars" id="ablationBars"></div>
+        </div>
+        <div class="split-note" id="mode"></div>
+      </section>
+    </div>
+
+    <section>
+      <h2>2 · What the model reconstructs (the cycle timeline)</h2>
+      <div class="story">
+        <strong>Same SynthCycle person, different question.</strong>
+        Above = raw body signals the generator created (with gaps left empty).
+        Below = “which cycle phase?” — solid dots are labels from the calendar rule;
+        dashed rings are Gradient Boosting guesses from heart / glucose / sleep / symptoms.
+      </div>
+      <p>
+        <span class="badge observed"><span class="swatch solid"></span> phase known in data</span>
+        <span class="badge inferred"><span class="swatch ring"></span> model guess (ring opacity = confidence)</span>
+        <span class="badge missing"><span class="swatch gap"></span> no phase label that day</span>
+      </p>
+      <div id="timelineWrap">
+        <div id="timelineEmpty" class="show">
+          The cycle timeline appears here after reconstruction.<br />
+          Press <b>Reconstruct cycle timeline</b> to turn the four streams above into day-by-day phase estimates.
+        </div>
+        <svg id="timelineChart" viewBox="0 0 720 220" preserveAspectRatio="xMidYMid meet" style="display:none"></svg>
+        <div id="timelineList"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3 · Audit trail</h2>
+      <p class="hint">Every estimate is tagged: synthetic participant, model version, license. No clinical claims.</p>
       <div class="receipt" id="receipt">Provenance appears after reconstruction.</div>
+    </section>
+
+    <section>
+      <h2>What CycleBench includes</h2>
+      <p class="hint">The reusable research layer left behind — not a wellness wrapper.</p>
+      <ul class="includes">
+        <li>Canonical daily-timeline data schema with observation fields; missingness preserved as NaN (never silently filled in the release)</li>
+        <li>Source adapter and provenance-manifest workflow (mcPHASES local + SynthCycle open)</li>
+        <li>Participant-level train / validation / test splits with leakage checks; trailing 7-day windows for time-aware features</li>
+        <li>Reproducible Gradient Boosting baseline and evaluator (seeded, one-command rerun)</li>
+        <li>Metrics: macro-F1, balanced accuracy, calibration (ECE), and modality ablations</li>
+        <li>Demo timeline distinguishing observed values, model-inferred phases (confidence-aware), and missing data</li>
+      </ul>
+      <p class="disclaimer" style="margin-top:12px">
+        Pipeline in one line: learn phase-wise stats from real <b>train</b> only → sample open SynthCycle
+        (calendar phase labels) → train GBM on synthetic → score on real held-out people (TSTR).
+        We do <b>not</b> train on real to label synthetic.
+      </p>
     </section>
   </main>
   <script>
     let payload = null;
-    let reconstructed = false;
+    let current = null;
+    let lastPid = null;
 
     const fmt = (v, d=1) => {
       if (v === null || v === undefined || v === "" || Number.isNaN(+v)) return "·";
       return (+v).toFixed(d);
     };
 
+    const isMissing = (v) => v === null || v === undefined || v === "" || Number.isNaN(+v);
+
+    function participantPool() {
+      if (payload.participants && payload.participants.length) return payload.participants;
+      return [{
+        participant_id: payload.participant_id,
+        streams: payload.streams || [],
+        predictions: payload.predictions || [],
+      }];
+    }
+
+    function pickParticipant(preferDifferent) {
+      const pool = participantPool();
+      if (pool.length === 1) return pool[0];
+      let choice = pool[Math.floor(Math.random() * pool.length)];
+      if (preferDifferent && lastPid) {
+        let guard = 0;
+        while (choice.participant_id === lastPid && guard < 12) {
+          choice = pool[Math.floor(Math.random() * pool.length)];
+          guard += 1;
+        }
+      }
+      return choice;
+    }
+
+    function showParticipant(p, { renderTimelineAfter } = {}) {
+      current = p;
+      lastPid = p.participant_id;
+      document.getElementById("pidLine").innerHTML =
+        `Showing <b>${p.participant_id}</b> · ${participantPool().length} people in demo pool · synthetic · no PHI`;
+      renderMess(p.streams || []);
+      if (renderTimelineAfter) {
+        renderTimeline(p.streams || [], p.predictions || []);
+      }
+    }
+
+    const SERIES = [
+      {
+        name: "Heart rate",
+        key: "hr_mean",
+        color: "#0f766e",
+        why: "Resting heart rate and HRV shift across the cycle — a daily wearable proxy when hormone labs are weeks apart.",
+      },
+      {
+        name: "Glucose (CGM)",
+        key: "cgm_mean",
+        color: "#b45309",
+        why: "Insulin sensitivity changes with estrogen/progesterone. Continuous glucose is a metabolic fingerprint of hormonal state.",
+      },
+      {
+        name: "Sleep hours",
+        key: "sleep_hours",
+        color: "#1d4ed8",
+        why: "Sleep length and quality track luteal vs follicular phases — cheap signal, high missingness, still informative.",
+      },
+      {
+        name: "Fatigue",
+        key: "symptom_fatigue",
+        color: "#7c2d12",
+        why: "Symptom diaries catch what sensors miss. Fatigue/mood/pain patterns help the model when physiology alone is ambiguous.",
+      },
+    ];
+
     function sparkline(values, color) {
-      const nums = values.map(v => (v === null || v === undefined || v === "" || Number.isNaN(+v) ? null : +v));
+      const nums = values.map(v => (isMissing(v) ? null : +v));
+      const n = nums.length;
       const known = nums.filter(v => v !== null);
-      if (!known.length) return `<svg class="spark" viewBox="0 0 120 36"></svg>`;
+      if (!known.length) {
+        return `<svg class="spark" viewBox="0 0 120 40"></svg>`;
+      }
       const min = Math.min(...known), max = Math.max(...known);
       const span = (max - min) || 1;
-      const pts = nums.map((v, i) => {
-        if (v === null) return null;
-        const x = (i / Math.max(nums.length - 1, 1)) * 120;
-        const y = 30 - ((v - min) / span) * 24;
-        return `${x},${y}`;
-      }).filter(Boolean).join(" ");
-      return `<svg class="spark" viewBox="0 0 120 36"><polyline fill="none" stroke="${color}" stroke-width="2" points="${pts}" /></svg>`;
+      const W = 120, H = 40, top = 6, bot = 34;
+      const xOf = (i) => (i / Math.max(n - 1, 1)) * W;
+      const yOf = (v) => bot - ((v - min) / span) * (bot - top);
+
+      const segments = [];
+      let run = [];
+      nums.forEach((v, i) => {
+        if (v === null) {
+          if (run.length) { segments.push(run); run = []; }
+        } else {
+          run.push([i, v]);
+        }
+      });
+      if (run.length) segments.push(run);
+
+      const polylines = segments.map(seg => {
+        if (seg.length === 1) {
+          const [i, v] = seg[0];
+          return `<circle cx="${xOf(i)}" cy="${yOf(v)}" r="2" fill="${color}" />`;
+        }
+        const pts = seg.map(([i, v]) => `${xOf(i)},${yOf(v)}`).join(" ");
+        return `<polyline fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${pts}" />`;
+      }).join("");
+
+      const gaps = nums.map((v, i) => {
+        if (v !== null) return "";
+        const x = xOf(i);
+        return `
+          <line x1="${x}" y1="${top}" x2="${x}" y2="${bot}" stroke="#d6d3d1" stroke-width="1" stroke-dasharray="2 2" />
+          <line x1="${x - 3}" y1="17" x2="${x + 3}" y2="23" stroke="#a8a29e" stroke-width="1.5" />
+          <line x1="${x + 3}" y1="17" x2="${x - 3}" y2="23" stroke="#a8a29e" stroke-width="1.5" />`;
+      }).join("");
+
+      return `<svg class="spark" viewBox="0 0 ${W} ${H}">${gaps}${polylines}</svg>`;
     }
 
     function renderMess(streams) {
       const slice = streams.slice(0, 21);
-      const series = {
-        "Heart rate": slice.map(r => r.hr_mean),
-        "CGM mean": slice.map(r => r.cgm_mean),
-        "Sleep hours": slice.map(r => r.sleep_hours),
-        "Fatigue": slice.map(r => r.symptom_fatigue),
-      };
-      const colors = ["#0f766e", "#b45309", "#1d4ed8", "#7c2d12"];
       const el = document.getElementById("streams");
-      el.innerHTML = Object.entries(series).map(([name, vals], i) => {
-        const gaps = vals.filter(v => v === null || v === undefined || v === "" || Number.isNaN(+v)).length;
-        return `<div class="card"><strong>${name} · ${gaps} gaps / ${vals.length}d</strong>${sparkline(vals, colors[i])}</div>`;
+      el.innerHTML = SERIES.map(s => {
+        const vals = slice.map(r => r[s.key]);
+        const gaps = vals.filter(isMissing).length;
+        const gapLabel = gaps === 0
+          ? `${vals.length} days · complete`
+          : `${gaps} missing day${gaps === 1 ? "" : "s"} / ${vals.length}`;
+        return `<div class="card">
+          <div class="topline"><strong>${s.name}</strong><span class="gaps">${gapLabel}</span></div>
+          <p class="why">${s.why}</p>
+          ${sparkline(vals, s.color)}
+        </div>`;
       }).join("");
     }
 
@@ -220,41 +882,78 @@
 
     function renderTimeline(streams, predictions) {
       const predMap = {};
-      (predictions || []).forEach(p => { predMap[p.date] = p.y_pred; });
+      const confMap = {};
+      (predictions || []).forEach(p => {
+        predMap[p.date] = p.y_pred;
+        if (p.confidence != null) confMap[p.date] = +p.confidence;
+      });
       const slice = streams.slice(0, 28);
-      const w = 640, h = 180, pad = 16;
+      const w = 720, h = 220;
+      const left = 108;
+      const right = 16, top = 24, bot = 28;
       const phases = ["menstrual", "follicular", "ovulatory", "luteal"];
-      const yOf = (p) => pad + phases.indexOf(p) * ((h - 2 * pad) / 3);
+      const yOf = (p) => {
+        const i = phases.indexOf(p);
+        return top + (i / (phases.length - 1)) * (h - top - bot);
+      };
+
+      let lanes = phases.map(p =>
+        `<line x1="${left}" y1="${yOf(p)}" x2="${w - right}" y2="${yOf(p)}" stroke="#e7e5e4" stroke-width="1" />`
+      ).join("");
 
       let dots = "";
       slice.forEach((r, i) => {
-        const x = pad + (i / Math.max(slice.length - 1, 1)) * (w - 2 * pad);
+        const x = left + (i / Math.max(slice.length - 1, 1)) * (w - left - right);
         const obs = r.cycle_phase;
         const inf = predMap[r.date];
+        const conf = confMap[r.date];
         if (obs) {
-          dots += `<circle cx="${x}" cy="${yOf(obs)}" r="4.5" fill="${phaseColor(obs)}" opacity="0.95" />`;
+          dots += `<circle cx="${x}" cy="${yOf(obs)}" r="5" fill="${phaseColor(obs)}" opacity="0.95" />`;
         } else {
-          dots += `<circle cx="${x}" cy="${h/2}" r="3" fill="#a8a29e" />`;
+          const y = (top + (h - bot)) / 2;
+          dots += `
+            <line x1="${x - 4}" y1="${y - 4}" x2="${x + 4}" y2="${y + 4}" stroke="#a8a29e" stroke-width="1.5" />
+            <line x1="${x + 4}" y1="${y - 4}" x2="${x - 4}" y2="${y + 4}" stroke="#a8a29e" stroke-width="1.5" />`;
         }
         if (inf) {
-          dots += `<circle cx="${x}" cy="${yOf(inf)}" r="7" fill="none" stroke="${phaseColor(inf)}" stroke-width="2" stroke-dasharray="3 2" opacity="0.85" />`;
+          // Opacity encodes model confidence (uncertainty ribbon proxy for categorical guesses)
+          const op = conf != null ? Math.max(0.25, Math.min(1, conf)) : 0.85;
+          dots += `<circle cx="${x}" cy="${yOf(inf)}" r="9" fill="none" stroke="${phaseColor(inf)}" stroke-width="2" stroke-dasharray="3 2" opacity="${op}" />`;
         }
       });
-      const labels = phases.map((p, i) =>
-        `<text x="8" y="${yOf(p) + 4}" font-size="10" fill="#78716c" font-family="ui-sans-serif,system-ui">${p.slice(0,3)}</text>`
-      ).join("");
-      document.getElementById("timelineChart").innerHTML = labels + dots;
-      document.getElementById("timelineChart").classList.add("fade-in");
 
-      document.getElementById("timelineList").innerHTML = slice.slice(0, 12).map(r => {
-        const inf = predMap[r.date];
-        const status = inf ? "inferred" : (r.cycle_phase ? "observed" : "missing");
-        const phase = inf || r.cycle_phase || "·";
-        return `<div class="day"><div>${r.date}</div><div><span class="badge ${status}">${status}</span> phase=<b>${phase}</b> · hr=${fmt(r.hr_mean)} · cgm=${fmt(r.cgm_mean)} · fatigue=${fmt(r.symptom_fatigue)}</div></div>`;
-      }).join("");
+      const labels = phases.map(p =>
+        `<text x="${left - 10}" y="${yOf(p) + 4}" text-anchor="end" font-size="12" fill="#57534e" font-family="ui-sans-serif,system-ui">${p}</text>`
+      ).join("");
+
+      const axis = `
+        <text x="${left}" y="${h - 6}" font-size="11" fill="#a8a29e" font-family="ui-sans-serif,system-ui">day 1</text>
+        <text x="${w - right}" y="${h - 6}" text-anchor="end" font-size="11" fill="#a8a29e" font-family="ui-sans-serif,system-ui">day ${slice.length}</text>
+        <text x="${(left + w - right) / 2}" y="14" text-anchor="middle" font-size="11" fill="#78716c" font-family="ui-sans-serif,system-ui">${current ? current.participant_id + " · " : ""}estimated cycle phase over time →</text>`;
+
+      document.getElementById("timelineEmpty").classList.remove("show");
+      const chart = document.getElementById("timelineChart");
+      chart.style.display = "block";
+      chart.innerHTML = lanes + labels + axis + dots;
+      chart.classList.remove("fade-in");
+      void chart.offsetWidth;
+      chart.classList.add("fade-in");
+
+      document.getElementById("timelineList").innerHTML =
+        `<div class="day" style="border:0;color:#78716c;font-family:ui-sans-serif,system-ui,sans-serif;font-size:12px"><div></div><div>First days — observed vs inferred (+ confidence)</div></div>` +
+        slice.slice(0, 12).map(r => {
+          const inf = predMap[r.date];
+          const conf = confMap[r.date];
+          const status = inf ? "inferred" : (r.cycle_phase ? "observed" : "missing");
+          const phase = inf || r.cycle_phase || "·";
+          const how = inf
+            ? `from wearables · conf ${conf != null ? (conf * 100).toFixed(0) + "%" : "—"}`
+            : (r.cycle_phase ? "labeled in dataset" : "no phase that day");
+          return `<div class="day"><div>${r.date}</div><div><span class="badge ${status}">${status}</span> <b>${phase}</b> · ${how}</div></div>`;
+        }).join("");
 
       document.getElementById("receipt").textContent = JSON.stringify({
-        participant_id: payload.participant_id,
+        participant_id: current ? current.participant_id : payload.participant_id,
         model: payload.model_version,
         source: "synthetic",
         license_tag: "MIT-synthetic-no-PHI",
@@ -265,17 +964,100 @@
     }
 
     function renderProof(m) {
-      const ba = m.balanced_accuracy != null ? (+m.balanced_accuracy).toFixed(3) : "—";
+      const tstr = m.balanced_accuracy != null ? +m.balanced_accuracy : null;
+      const naive = m.naive != null ? +m.naive : 0.25;
+      const trtr = m.trtr != null ? +m.trtr : null;
+      const pct = m.pct_of_trtr != null ? Math.round(+m.pct_of_trtr * 100) : null;
+      const ba = tstr != null ? tstr.toFixed(3) : "—";
+
       document.getElementById("headline").innerHTML =
-        `${ba}<span>${m.headline || ""}</span>`;
+        `${ba}<span>${pct != null ? pct + "% of train-on-real ceiling · +" + (m.beats_naive != null ? (+m.beats_naive).toFixed(3) : "—") + " vs guess" : "on held-out real people"}</span>`;
+
+      const ceiling = Math.max(trtr || 0, tstr || 0, naive, 0.01);
+      const pctW = (v) => Math.max(2, Math.round((v / ceiling) * 100));
+
+      document.getElementById("bars").innerHTML = `
+        <div class="bar-row">
+          <div class="lab">Random guess</div>
+          <div class="bar-track"><div class="bar-fill naive" style="width:${pctW(naive)}%"></div></div>
+          <div class="val">${naive.toFixed(2)}</div>
+        </div>
+        <div class="bar-row">
+          <div class="lab">Ours<br/>(SynthCycle → real)</div>
+          <div class="bar-track"><div class="bar-fill tstr" style="width:${tstr != null ? pctW(tstr) : 2}%"></div></div>
+          <div class="val">${ba}</div>
+        </div>
+        <div class="bar-row">
+          <div class="lab">Train on real<br/>(ceiling)</div>
+          <div class="bar-track"><div class="bar-fill trtr" style="width:${trtr != null ? pctW(trtr) : 2}%"></div></div>
+          <div class="val">${trtr != null ? trtr.toFixed(3) : "—"}</div>
+        </div>`;
+
       const split = payload.split_real || {};
-      document.getElementById("proof").innerHTML = `
-        <div>Protocol<b>${m.protocol || "—"}</b></div>
-        <div>vs naive<b>${m.beats_naive != null ? "+" + (+m.beats_naive).toFixed(3) : "—"}</b></div>
-        <div>% of TRTR<b>${m.pct_of_trtr != null ? Math.round(+m.pct_of_trtr * 100) + "%" : "—"}</b></div>
-        <div>Real split<b>${split.train || "—"} / ${split.val || "—"} / ${split.test || "—"}</b></div>`;
-      document.getElementById("mode").textContent =
-        `Open cohort: SynthCycle · ${payload.synth_fitted_from || ""} · restricted clinical rows not redistributed`;
+      document.getElementById("mode").innerHTML =
+        `<span>Real split <b>${split.train || "—"} / ${split.val || "—"} / ${split.test || "—"}</b></span>
+         <span>Clinical rows <b>not</b> redistributed</span>`;
+
+      const ablations = (payload.ablations || []).filter(a => a.balanced_accuracy != null);
+      const wrap = document.getElementById("ablationWrap");
+      if (ablations.length) {
+        wrap.style.display = "block";
+        const maxBa = Math.max(...ablations.map(a => +a.balanced_accuracy), 0.01);
+        document.getElementById("ablationBars").innerHTML = ablations.map(a => {
+          const ba = +a.balanced_accuracy;
+          const w = Math.max(4, Math.round((ba / maxBa) * 100));
+          return `<div class="arow"><div>${a.name}</div><div class="atrack"><div class="afill" style="width:${w}%"></div></div><div class="aval">${ba.toFixed(2)}</div></div>`;
+        }).join("");
+      } else {
+        wrap.style.display = "none";
+      }
+    }
+
+    function renderSynthMeta() {
+      const nPeople = payload.synth_n_participants ?? 120;
+      const nDays = payload.synth_days ?? 60;
+      const miss = payload.synth_missing_rate != null
+        ? `~${Math.round(+payload.synth_missing_rate * 100)}%`
+        : "~8%";
+      document.getElementById("synthStats").innerHTML = `
+        <div><b>${nPeople}</b><span>synthetic people</span></div>
+        <div><b>${nDays}</b><span>days each</span></div>
+        <div><b>${miss}</b><span>gaps on purpose</span></div>`;
+
+      const fitted = payload.synth_fitted_from || "default_physiology_priors";
+      const split = payload.split_real || {};
+      const title = document.getElementById("synthHeroTitle");
+      const body = document.getElementById("synthHeroBody");
+      if (fitted.includes("mcphases")) {
+        title.textContent = `${nPeople} × ${nDays} synthetic days, stats-matched to mcPHASES train`;
+        body.innerHTML = `Restricted clinical data can’t be redistributed. We learn the <b>shape</b> of real
+            train data (per-phase means + how signals move together), then <b>sample new people</b>
+            anyone can download. Same statistics — zero patient identifiers.`;
+      } else {
+        title.textContent = `${nPeople} × ${nDays} synthetic days — open cohort anyone can download`;
+        body.innerHTML = `Demo pool generated with the SynthCycle generator (physiology priors).
+            Headline TSTR scores below still come from the scored mcPHASES run when available.
+            Re-run with fitted real-train stats to refresh this pool as stats-matched.`;
+      }
+      document.getElementById("synthGuard").innerHTML = `
+        <span><em>Fitted from</em> ${fitted.replace(/_/g, " ")}</span>
+        <span><em>Leakage guard</em> real test (${split.test ?? "—"} people) never enter the generator</span>
+        <span><em>License</em> MIT synthetic · mcPHASES rows stay restricted</span>`;
+
+      const tag = document.getElementById("modelTag");
+      if (tag && payload.model_name) {
+        tag.innerHTML = `
+          <span class="model-name">${payload.model_name === "GradientBoostingClassifier" ? "Gradient Boosting" : payload.model_name}</span>
+          <span class="model-meta">${payload.model_meta || ""}</span>`;
+      }
+    }
+
+    function resetTimeline() {
+      document.getElementById("timelineChart").innerHTML = "";
+      document.getElementById("timelineChart").style.display = "none";
+      document.getElementById("timelineEmpty").classList.add("show");
+      document.getElementById("timelineList").innerHTML = "";
+      document.getElementById("receipt").textContent = "Provenance appears after reconstruction.";
     }
 
     async function init() {
@@ -283,9 +1065,10 @@
         const res = await fetch("../outputs/demo_public.json");
         if (!res.ok) throw new Error("demo_public.json missing — run scripts/run_benchmark.py");
         payload = await res.json();
-        renderMess(payload.streams || []);
+        renderSynthMeta();
         renderProof(payload.metrics || {});
-        document.getElementById("timelineList").textContent = "Press Reconstruct to snap chaos → trajectory.";
+        showParticipant(pickParticipant(false), { renderTimelineAfter: false });
+        resetTimeline();
       } catch (e) {
         document.getElementById("streams").textContent = e.message;
       }
@@ -295,16 +1078,17 @@
       const btn = document.getElementById("btn");
       btn.disabled = true;
       btn.textContent = "Reconstructing…";
-      await new Promise(r => setTimeout(r, 700));
-      renderTimeline(payload.streams || [], payload.predictions || []);
-      reconstructed = true;
+      const person = pickParticipant(true);
+      showParticipant(person, { renderTimelineAfter: false });
+      await new Promise(r => setTimeout(r, 500));
+      renderTimeline(person.streams || [], person.predictions || []);
       btn.disabled = false;
-      btn.textContent = "Reconstruct trajectory";
+      btn.textContent = "Reconstruct cycle timeline";
+      document.getElementById("timelineWrap").scrollIntoView({ behavior: "smooth", block: "start" });
     };
     document.getElementById("resetBtn").onclick = () => {
-      document.getElementById("timelineChart").innerHTML = "";
-      document.getElementById("timelineList").textContent = "Press Reconstruct to snap chaos → trajectory.";
-      document.getElementById("receipt").textContent = "Provenance appears after reconstruction.";
+      resetTimeline();
+      showParticipant(pickParticipant(true), { renderTimelineAfter: false });
     };
     init();
   </script>

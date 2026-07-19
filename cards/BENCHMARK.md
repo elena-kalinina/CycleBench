@@ -8,18 +8,21 @@ predict the held-out target at day *t*, evaluated on **held-out participants**.
 
 Default synthetic target: `cycle_phase` (categorical).
 Swap to a continuous channel (e.g. `cgm_mean`) without changing the evaluator — it is target-agnostic.
-Target is finalized after mcPHASES density inspection (H0–1).
 
 ## Splits
-Participant-level, time-aware:
-- train 60% / val 20% / test 20% of participants
-- Leakage check: `assert_no_participant_leakage` (must be empty)
+**Participant-level** 60% / 20% / 20% with `assert_no_participant_leakage`.
+
+Why participant-level (not a global calendar cut): people start on different dates; the
+leakage risk is *identity* (the same person's physiology in train and test), not clock time.
+Time-awareness within a person comes from **trailing 7-day windows** (no future features).
+The val split is reserved for model selection; the GBM baseline trains on train and
+reports on test (plus TSTR/TRTR protocols).
 
 ## Metrics
-- Categorical: macro-F1, balanced accuracy, accuracy, ECE
+- Categorical: macro-F1, balanced accuracy, accuracy, ECE (calibration)
 - Continuous: MAE, RMSE
 - Always report **delta vs naive** (population mode / mean)
-- Ablation: missing-modality (TODO H10–13)
+- Modality ablations: `scripts/run_ablations.py` → `outputs/ablation.json`
 
 ## Protocols
 | Protocol | Train | Test | When |
@@ -36,5 +39,6 @@ Prefer TSTR. If only TSTS is available, say so honestly in the demo:
 ```bash
 python scripts/generate_synth.py
 python scripts/run_benchmark.py
-# → outputs/latest_metrics.json
+python scripts/run_ablations.py   # optional modality table
+# → outputs/latest_metrics.json, outputs/ablation.json
 ```

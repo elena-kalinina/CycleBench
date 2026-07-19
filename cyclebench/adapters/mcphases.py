@@ -247,6 +247,22 @@ def adapt_and_save(
     df.to_parquet(out_path, index=False)
     # CSV for local debugging only — still gitignored under data/processed/
     df.to_csv(out_path.with_suffix(".csv"), index=False)
+    # Provenance manifest stays LOCAL with the restricted timeline (gitignored).
+    from cyclebench.provenance import manifest_from_timeline
+
+    info = inspect(root)
+    manifest_from_timeline(
+        df,
+        source_name="mcPHASES",
+        adapter="cyclebench.adapters.mcphases",
+        path=out_path.with_name("mcphases_daily_provenance.json"),
+        redistributable=False,
+        extra={
+            "upstream_license": info.get("license"),
+            "source_root": info.get("root"),
+            "n_source_files": info.get("n_files"),
+        },
+    )
     return df, out_path
 
 

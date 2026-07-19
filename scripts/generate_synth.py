@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from cyclebench.config import N_SYNTH_PARTICIPANTS, DAYS_PER_PARTICIPANT, SYNTH_DIR
+from cyclebench.provenance import manifest_from_timeline
 from cyclebench.synthcycle.generator import SynthCycleGenerator
 
 
@@ -32,6 +33,15 @@ def main() -> None:
     manifest = gen.manifest(df)
     man_path = args.out.with_name("synthcycle_manifest.json")
     man_path.write_text(json.dumps(manifest, indent=2))
+    # Provenance workflow artifact (open — safe to commit alongside generator)
+    manifest_from_timeline(
+        df,
+        source_name="SynthCycle",
+        adapter="cyclebench.synthcycle.generator",
+        path=args.out.with_name("synthcycle_provenance.json"),
+        redistributable=True,
+        extra={"generator_manifest": manifest},
+    )
     print(f"wrote {args.out} ({len(df)} rows, {df['participant_id'].nunique()} participants)")
     print(f"manifest: {man_path}")
     print(json.dumps(manifest, indent=2))
