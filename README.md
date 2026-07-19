@@ -49,24 +49,6 @@ See [`outputs/latest_metrics.json`](outputs/latest_metrics.json). Modality ablat
 
 ---
 
-## How this matches a strong submission
-
-Mapped to the challenge brief (*What Makes a Strong Submission* + success criteria):
-
-| Strong submission asks for… | CycleBench delivers… |
-|---|---|
-| Publish reusable datasets, benchmarks, checkpoints, evaluation under an open license | **SynthCycle** (MIT, no PHI) + schema, splits, baseline artifact, evaluator, cards |
-| Solve **one** clearly defined prediction/infrastructure problem with transparent methods | Single task: masked multimodal reconstruction; documented splits, metrics, leakage checks |
-| Share reproducible code so others can extend the work | One-command generate + evaluate; DATA / BENCHMARK / MODEL cards |
-| Avoid unsupported diagnostic claims / UI without validation | Explicit research-only framing; metrics vs naive baseline; provenance on outputs |
-| **Women's Health Impact** | Infrastructure for continuous hormonal understanding — relevant to cycle, menopause, and underdiagnosed conditions affecting hundreds of millions |
-| **Technical Excellence** | Participant-safe splits, missingness reporting, calibration, TSTR vs TRTR vs naive |
-| **Foundation Value** | Leaves open assets that outlive the weekend — not an isolated app |
-
-We deliberately did **not** ship a consumer wellness wrapper. The demo exists to *show* the benchmark working — the product is the scientific asset.
-
----
-
 ## Try it (reproduce in minutes)
 
 ```bash
