@@ -23,6 +23,9 @@ data/synthetic/*.csv
 outputs/**
 !outputs/.gitkeep
 !outputs/latest_metrics.json
+!outputs/demo_public.json
+!outputs/demo_timeline.csv
+!outputs/demo_predictions.csv
 
 # IDE / OS
 .idea/

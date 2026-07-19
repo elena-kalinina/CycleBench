@@ -5,27 +5,33 @@
     "kind": "categorical",
     "note": "Research-only. Not a diagnosis."
   },
-  "splits": {
+  "synth_fitted_from": "mcphases_train_stats",
+  "splits_synth_prior": {
     "train": 14,
     "val": 5,
     "test": 5
   },
+  "splits_real": {
+    "train": 25,
+    "val": 8,
+    "test": 9
+  },
   "missingness_synth": {
-    "n_rows": 840,
-    "n_participants": 24,
+    "n_rows": 7200,
+    "n_participants": 120,
     "per_column_missing_rate": {
-      "hr_mean": 0.08571428571428572,
-      "hrv_rmssd": 0.06666666666666667,
-      "steps": 0.06190476190476191,
-      "sleep_hours": 0.06547619047619048,
-      "sleep_efficiency": 0.08214285714285714,
-      "cgm_mean": 0.06785714285714285,
-      "cgm_std": 0.08928571428571429,
-      "symptom_fatigue": 0.07738095238095238,
-      "symptom_mood": 0.07738095238095238,
-      "symptom_pain": 0.08333333333333333
+      "hr_mean": 0.07597222222222222,
+      "hrv_rmssd": 0.08027777777777778,
+      "steps": 0.07847222222222222,
+      "sleep_hours": 0.07527777777777778,
+      "sleep_efficiency": 0.08027777777777778,
+      "cgm_mean": 0.08180555555555556,
+      "cgm_std": 0.08722222222222223,
+      "symptom_fatigue": 0.08138888888888889,
+      "symptom_mood": 0.07625,
+      "symptom_pain": 0.08736111111111111
     },
-    "mean_missing_rate": 0.07571428571428572
+    "mean_missing_rate": 0.08043055555555556
   },
   "tsts": {
     "kind": "categorical",
@@ -47,18 +53,43 @@
     "delta_balanced_accuracy": 0.38807026307026304,
     "delta_accuracy": 0.3034482758620689
   },
-  "tstr": null,
-  "trtr": null,
-  "naive_real": null,
+  "tstr": {
+    "kind": "categorical",
+    "n": 984,
+    "macro_f1": 0.24748555948518391,
+    "balanced_accuracy": 0.2887577544477934,
+    "accuracy": 0.31808943089430897,
+    "ece": 0.40386473919247007
+  },
+  "trtr": {
+    "kind": "categorical",
+    "n": 984,
+    "macro_f1": 0.30728376137891017,
+    "balanced_accuracy": 0.32847421080323597,
+    "accuracy": 0.3282520325203252,
+    "ece": 0.15018907789198743
+  },
+  "naive_real": {
+    "kind": "categorical",
+    "n": 984,
+    "macro_f1": 0.12585551330798478,
+    "balanced_accuracy": 0.25,
+    "accuracy": 0.3363821138211382
+  },
+  "delta_tstr": {
+    "delta_macro_f1": 0.12163004617719914,
+    "delta_balanced_accuracy": 0.03875775444779339,
+    "delta_accuracy": -0.01829268292682923
+  },
   "headline": {
     "primary_metric": "balanced_accuracy",
-    "protocol": "TSTS",
-    "tstr": 0.638070263070263,
+    "protocol": "TSTR",
+    "tstr": 0.2887577544477934,
     "naive": 0.25,
-    "trtr": null,
-    "beats_naive": 0.38807026307026304,
-    "pct_of_trtr": null,
-    "headline": "TSTS balanced_accuracy=0.638 (+0.388 vs naive)"
+    "trtr": 0.32847421080323597,
+    "beats_naive": 0.03875775444779339,
+    "pct_of_trtr": 0.8790880530367308,
+    "headline": "TSTR balanced_accuracy=0.289 (+0.039 vs naive, 88% of TRTR)"
   },
-  "mode": "TSTS_synth_only"
+  "mode": "TSTR"
 }

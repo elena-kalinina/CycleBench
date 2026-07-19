@@ -1,33 +1,36 @@
 # DATA_CARD — CycleBench / SynthCycle
 
-> Fill remaining fields once mcPHASES is inspected. Synthetic release is PHI-free.
-
 ## Dataset summary
-- **Name:** SynthCycle v1 (open) + optional local mcPHASES evaluation split (not redistributed unless license permits)
+- **Name:** SynthCycle (open) + local mcPHASES evaluation (not redistributed)
 - **Grain:** one row per participant per calendar day
 - **Schema:** `cyclebench/data_contract/` (`cyclebench_daily_v1`)
-- **Synthetic n (default):** 80 participants × 60 days
-- **License (synthetic):** MIT — no PHI
-- **License (mcPHASES-derived):** TBD after PhysioNet / upstream DUA review — do **not** claim open until verified
+- **Synthetic:** generator + fitted-from-train cohort (MIT, no PHI)
+- **Real eval:** mcPHASES PhysioNet v1.0.0 — **local only**
 
 ## Sources
 | Source | Role | Redistributable? |
 |---|---|---|
 | SynthCycle generator | open training cohort | **Yes** (MIT) |
-| mcPHASES (PhysioNet) | real held-out TSTR anchor | Only if DUA allows |
+| mcPHASES (PhysioNet) | real held-out TSTR / TRTR anchor | **No** — Restricted Health Data License |
+
+## Licensing (critical)
+mcPHASES is under the **PhysioNet Restricted Health Data License**. CycleBench:
+- evaluates on a **local** adapted daily table (`data/processed/`, gitignored)
+- does **not** publish raw or derived patient rows
+- releases **SynthCycle + code + aggregate metrics** so others can reproduce the method without restricted data access
 
 ## Missingness
-Reported per column in `outputs/latest_metrics.json` → `missingness_synth`.
-Synthetic default missing rate target ≈ 8%.
+Reported in `outputs/latest_metrics.json`. On the adapted mcPHASES daily table (local): CGM ~45% missing; symptoms ~41%; HRV ~14%; HR largely complete.
 
 ## Intended use
 Research benchmark for masked multimodal hormonal-state reconstruction.
 **Not** for diagnosis, fertility advice, or clinical decisions.
 
 ## Known limitations / bias
-- Default synthetic priors are literature-informed, not patient-derived, until `fit_from_dataframe` is run on a real train split.
-- Phase boundaries are approximate; cycle-day is excluded from features when the target is `cycle_phase` (leakage guard).
+- Cycle-phase prediction from wearables alone is a hard ceiling (see TRTR in metrics) — we report TSTR vs that ceiling honestly.
+- Phase label “Fertility” in mcPHASES is mapped to `ovulatory`.
 - Western wearable / CGM-centric feature set; representation gaps expected.
+- SynthCycle fitted only on the **train** participant split (no test leakage into the generator).
 
 ## Provenance rules
-Every demo value shows `source` + `license_tag` + model version (`baseline.joblib`).
+Demo values show `source` + `license_tag` + model version (`baseline.joblib`). Public demo uses **synthetic** participants only.

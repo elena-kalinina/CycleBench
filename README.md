@@ -38,8 +38,12 @@ CycleBench contributes one reusable layer: a **data contract + leakage-safe benc
 | Protocol | Train | Test | Role |
 |---|---|---|---|
 | TSTS | SynthCycle | SynthCycle held-out | Always available, fully open |
-| **TSTR** | SynthCycle | Real held-out (e.g. mcPHASES) | Proves the open cohort is useful on real physiology |
+| **TSTR** | SynthCycle (fitted on real train stats only) | Real held-out (mcPHASES, local) | Proves the open cohort transfers |
 | TRTR | Real | Real held-out | Ceiling for comparison |
+
+**Current headline (cycle-phase reconstruction, held-out participants):**  
+`TSTR balanced_accuracy=0.289 (+0.039 vs naive, 88% of TRTR)`  
+See [`outputs/latest_metrics.json`](outputs/latest_metrics.json). Full metrics include TSTS, calibration (ECE), and split sizes. Real patient rows are **not** redistributed (PhysioNet Restricted); the open asset is SynthCycle + this evaluation recipe.
 
 Latest metrics: [`outputs/latest_metrics.json`](outputs/latest_metrics.json).
 
