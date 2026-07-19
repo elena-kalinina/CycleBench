@@ -1,13 +1,13 @@
 {
   "name": "SynthCycle",
   "mode": "correlated",
-  "include_hormones": false,
+  "include_hormones": true,
   "n_participants": 120,
   "n_rows": 7200,
   "days_span": 60,
   "fitted_from": "mcphases_train_stats_correlated",
   "missing_rate_target": 0.08,
-  "observed_missing_rate": 0.07979166666666666,
+  "observed_missing_rate": 0.08059722222222222,
   "phases": [
     "menstrual",
     "follicular",

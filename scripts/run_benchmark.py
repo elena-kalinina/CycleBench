@@ -106,7 +106,9 @@ def main() -> None:
             raise RuntimeError(leak_r)
 
         real_train = filter_split(real, real_splits["train"])
-        gen = SynthCycleGenerator(seed=SEED).fit_from_dataframe(real_train)
+        gen = SynthCycleGenerator(seed=SEED).fit_from_dataframe(
+            real_train, mode="correlated", include_hormones=False
+        )
         fitted_from = gen.fitted_from
         synth_fitted = gen.generate(n_participants=args.n_synth, days=60)
         fitted_path = SYNTH_DIR / "synthcycle_fitted_from_real_train.parquet"

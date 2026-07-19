@@ -42,10 +42,10 @@ CycleBench contributes one reusable layer: a **data contract + leakage-safe benc
 | TRTR | Real | Real held-out | Ceiling for comparison |
 
 **Current headline (cycle-phase reconstruction, held-out participants):**  
-`TSTR balanced_accuracy=0.289 (+0.039 vs naive, 88% of TRTR)`  
-See [`outputs/latest_metrics.json`](outputs/latest_metrics.json). Full metrics include TSTS, calibration (ECE), and split sizes. Real patient rows are **not** redistributed (PhysioNet Restricted); the open asset is SynthCycle + this evaluation recipe.
+`TSTR balanced_accuracy=0.295 (+0.045 vs naive, 90% of TRTR)`  
+See [`outputs/latest_metrics.json`](outputs/latest_metrics.json). Modality ablations and an estrogen-reconstruction task live in [`outputs/ablation.json`](outputs/ablation.json) / [`outputs/metrics_estrogen.json`](outputs/metrics_estrogen.json) — reported honestly (estrogen remains an open problem: even TRTR does not beat a population-mean floor on this cohort). Real patient rows are **not** redistributed (PhysioNet Restricted); the open asset is SynthCycle + this evaluation recipe.
 
-Latest metrics: [`outputs/latest_metrics.json`](outputs/latest_metrics.json).
+**Demo (no external UI tool required):** from the repo root run `python -m http.server 8765` then open [http://127.0.0.1:8765/demo/](http://127.0.0.1:8765/demo/) — press **Reconstruct trajectory**.
 
 ---
 

@@ -1,0 +1,333 @@
+{
+  "synth_mode": "correlated",
+  "synth_manifest": {
+    "name": "SynthCycle",
+    "mode": "correlated",
+    "include_hormones": true,
+    "n_participants": 120,
+    "n_rows": 7200,
+    "days_span": 60,
+    "fitted_from": "mcphases_train_stats_correlated",
+    "missing_rate_target": 0.08,
+    "observed_missing_rate": 0.08059722222222222,
+    "phases": [
+      "menstrual",
+      "follicular",
+      "ovulatory",
+      "luteal"
+    ],
+    "license": "MIT \u2014 synthetic, no PHI",
+    "seed": 42
+  },
+  "ablations": [
+    {
+      "ablation": "full",
+      "features": [
+        "hr_mean",
+        "hrv_rmssd",
+        "steps",
+        "sleep_hours",
+        "sleep_efficiency",
+        "cgm_mean",
+        "cgm_std",
+        "symptom_fatigue",
+        "symptom_mood",
+        "symptom_pain"
+      ],
+      "tstr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.2606598569012527,
+        "balanced_accuracy": 0.27475193219813965,
+        "accuracy": 0.2682926829268293,
+        "ece": 0.4708222901345813
+      },
+      "trtr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.30728376137891017,
+        "balanced_accuracy": 0.32847421080323597,
+        "accuracy": 0.3282520325203252,
+        "ece": 0.15018907789198743
+      },
+      "naive": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.12585551330798478,
+        "balanced_accuracy": 0.25,
+        "accuracy": 0.3363821138211382
+      },
+      "headline": {
+        "primary_metric": "balanced_accuracy",
+        "protocol": "TSTR",
+        "tstr": 0.27475193219813965,
+        "naive": 0.25,
+        "trtr": 0.32847421080323597,
+        "beats_naive": 0.024751932198139648,
+        "pct_of_trtr": 0.8364490214506451,
+        "headline": "TSTR balanced_accuracy=0.275 (+0.025 vs naive, 84% of TRTR)"
+      }
+    },
+    {
+      "ablation": "no_cgm",
+      "features": [
+        "hr_mean",
+        "hrv_rmssd",
+        "steps",
+        "sleep_hours",
+        "sleep_efficiency",
+        "symptom_fatigue",
+        "symptom_mood",
+        "symptom_pain"
+      ],
+      "tstr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.25894156734110557,
+        "balanced_accuracy": 0.27389162108147314,
+        "accuracy": 0.266260162601626,
+        "ece": 0.48006490023397386
+      },
+      "trtr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.3178084918177797,
+        "balanced_accuracy": 0.33831379908179826,
+        "accuracy": 0.3485772357723577,
+        "ece": 0.11898384968794319
+      },
+      "naive": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.12585551330798478,
+        "balanced_accuracy": 0.25,
+        "accuracy": 0.3363821138211382
+      },
+      "headline": {
+        "primary_metric": "balanced_accuracy",
+        "protocol": "TSTR",
+        "tstr": 0.27389162108147314,
+        "naive": 0.25,
+        "trtr": 0.33831379908179826,
+        "beats_naive": 0.023891621081473136,
+        "pct_of_trtr": 0.8095786273714807,
+        "headline": "TSTR balanced_accuracy=0.274 (+0.024 vs naive, 81% of TRTR)"
+      }
+    },
+    {
+      "ablation": "no_sleep",
+      "features": [
+        "hr_mean",
+        "hrv_rmssd",
+        "steps",
+        "cgm_mean",
+        "cgm_std",
+        "symptom_fatigue",
+        "symptom_mood",
+        "symptom_pain"
+      ],
+      "tstr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.26958628672976026,
+        "balanced_accuracy": 0.2795424807079835,
+        "accuracy": 0.2764227642276423,
+        "ece": 0.43048573242437965
+      },
+      "trtr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.3110602847277949,
+        "balanced_accuracy": 0.33803305413493834,
+        "accuracy": 0.3475609756097561,
+        "ece": 0.12372303299864881
+      },
+      "naive": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.12585551330798478,
+        "balanced_accuracy": 0.25,
+        "accuracy": 0.3363821138211382
+      },
+      "headline": {
+        "primary_metric": "balanced_accuracy",
+        "protocol": "TSTR",
+        "tstr": 0.2795424807079835,
+        "naive": 0.25,
+        "trtr": 0.33803305413493834,
+        "beats_naive": 0.029542480707983487,
+        "pct_of_trtr": 0.826967887573485,
+        "headline": "TSTR balanced_accuracy=0.280 (+0.030 vs naive, 83% of TRTR)"
+      }
+    },
+    {
+      "ablation": "no_symptoms",
+      "features": [
+        "hr_mean",
+        "hrv_rmssd",
+        "steps",
+        "sleep_hours",
+        "sleep_efficiency",
+        "cgm_mean",
+        "cgm_std"
+      ],
+      "tstr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.2670804026560707,
+        "balanced_accuracy": 0.2735027952925449,
+        "accuracy": 0.2926829268292683,
+        "ece": 0.21136390267669244
+      },
+      "trtr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.29614251723930984,
+        "balanced_accuracy": 0.3221705159306706,
+        "accuracy": 0.35060975609756095,
+        "ece": 0.0759348892247659
+      },
+      "naive": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.12585551330798478,
+        "balanced_accuracy": 0.25,
+        "accuracy": 0.3363821138211382
+      },
+      "headline": {
+        "primary_metric": "balanced_accuracy",
+        "protocol": "TSTR",
+        "tstr": 0.2735027952925449,
+        "naive": 0.25,
+        "trtr": 0.3221705159306706,
+        "beats_naive": 0.023502795292544898,
+        "pct_of_trtr": 0.848938005709378,
+        "headline": "TSTR balanced_accuracy=0.274 (+0.024 vs naive, 85% of TRTR)"
+      }
+    },
+    {
+      "ablation": "no_hrv",
+      "features": [
+        "hr_mean",
+        "steps",
+        "sleep_hours",
+        "sleep_efficiency",
+        "cgm_mean",
+        "cgm_std",
+        "symptom_fatigue",
+        "symptom_mood",
+        "symptom_pain"
+      ],
+      "tstr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.2644097803020745,
+        "balanced_accuracy": 0.27647416971543615,
+        "accuracy": 0.2682926829268293,
+        "ece": 0.4400518432502819
+      },
+      "trtr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.28881486412879015,
+        "balanced_accuracy": 0.31409300187915146,
+        "accuracy": 0.3150406504065041,
+        "ece": 0.1653507349477197
+      },
+      "naive": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.12585551330798478,
+        "balanced_accuracy": 0.25,
+        "accuracy": 0.3363821138211382
+      },
+      "headline": {
+        "primary_metric": "balanced_accuracy",
+        "protocol": "TSTR",
+        "tstr": 0.27647416971543615,
+        "naive": 0.25,
+        "trtr": 0.31409300187915146,
+        "beats_naive": 0.026474169715436147,
+        "pct_of_trtr": 0.8802302759416801,
+        "headline": "TSTR balanced_accuracy=0.276 (+0.026 vs naive, 88% of TRTR)"
+      }
+    },
+    {
+      "ablation": "wearable_only",
+      "features": [
+        "hr_mean",
+        "hrv_rmssd",
+        "steps",
+        "sleep_hours",
+        "sleep_efficiency"
+      ],
+      "tstr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.24892583439751473,
+        "balanced_accuracy": 0.2702527789020177,
+        "accuracy": 0.2804878048780488,
+        "ece": 0.2584287315587168
+      },
+      "trtr": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.2692527498624129,
+        "balanced_accuracy": 0.29793658566258535,
+        "accuracy": 0.32621951219512196,
+        "ece": 0.14293295210764348
+      },
+      "naive": {
+        "kind": "categorical",
+        "n": 984,
+        "macro_f1": 0.12585551330798478,
+        "balanced_accuracy": 0.25,
+        "accuracy": 0.3363821138211382
+      },
+      "headline": {
+        "primary_metric": "balanced_accuracy",
+        "protocol": "TSTR",
+        "tstr": 0.2702527789020177,
+        "naive": 0.25,
+        "trtr": 0.29793658566258535,
+        "beats_naive": 0.02025277890201771,
+        "pct_of_trtr": 0.9070815465680349,
+        "headline": "TSTR balanced_accuracy=0.270 (+0.020 vs naive, 91% of TRTR)"
+      }
+    }
+  ],
+  "estrogen": {
+    "task": "estrogen_reconstruction",
+    "features": "multimodal + cycle_day (legitimate for hormone level; not phase label leakage)",
+    "note": "Research-only. Not a diagnosis.",
+    "tstr": {
+      "kind": "continuous",
+      "n": 862,
+      "mae": 92.12422617125333,
+      "rmse": 135.05898127849596
+    },
+    "trtr": {
+      "kind": "continuous",
+      "n": 862,
+      "mae": 93.1691989609207,
+      "rmse": 136.58072074078152
+    },
+    "naive": {
+      "kind": "continuous",
+      "n": 862,
+      "mae": 79.57039323155004,
+      "rmse": 121.48558093671765
+    },
+    "headline": {
+      "primary_metric": "mae",
+      "protocol": "TSTR",
+      "tstr": 92.12422617125333,
+      "naive": 79.57039323155004,
+      "trtr": 93.1691989609207,
+      "beats_naive": -12.553832939703284,
+      "pct_of_trtr": 1.0113430834981976,
+      "headline": "TSTR mae=92.124 (-12.554 vs naive; lower MAE better)"
+    },
+    "n_test_windows": 862
+  }
+}

@@ -26,6 +26,10 @@ outputs/**
 !outputs/demo_public.json
 !outputs/demo_timeline.csv
 !outputs/demo_predictions.csv
+!outputs/ablation.json
+!outputs/metrics_estrogen.json
+!data/synthetic/synthcycle_fitted_manifest.json
+!data/synthetic/*_manifest.json
 
 # IDE / OS
 .idea/

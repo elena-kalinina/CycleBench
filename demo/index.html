@@ -6,49 +6,61 @@
   <title>CycleBench — reconstruct the trajectory</title>
   <style>
     :root {
-      --bg: #f7f3ee;
+      --bg: #f4efe8;
       --ink: #1c1917;
       --muted: #78716c;
-      --line: #e7e0d8;
+      --line: #e0d8ce;
       --accent: #0f766e;
       --warn: #b45309;
       --miss: #a8a29e;
+      --panel: #fffcf7;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-      background: var(--bg);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #e8f2ef 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #f3e9dc 0%, transparent 50%),
+        var(--bg);
       color: var(--ink);
       line-height: 1.45;
     }
     header {
-      padding: 28px 32px 12px;
+      padding: 28px 32px 16px;
       border-bottom: 1px solid var(--line);
     }
     header h1 {
       margin: 0 0 6px;
-      font-size: 28px;
-      letter-spacing: -0.02em;
+      font-size: 32px;
+      letter-spacing: -0.03em;
     }
-    header p { margin: 0; color: var(--muted); max-width: 52rem; }
-    main { padding: 20px 32px 48px; display: grid; gap: 20px; }
-    .row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+    header p { margin: 0; color: var(--muted); max-width: 46rem; font-size: 15px; }
+    main { padding: 20px 32px 56px; display: grid; gap: 18px; max-width: 1100px; }
+    .row { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 18px; }
     @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
     section {
-      background: #fffdf9;
+      background: var(--panel);
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 16px 18px;
     }
-    section h2 { margin: 0 0 10px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    section h2 {
+      margin: 0 0 12px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
     .badge {
       display: inline-block;
-      font-size: 12px;
+      font-size: 11px;
       padding: 2px 8px;
       border-radius: 999px;
       border: 1px solid var(--line);
       margin-right: 6px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
     }
     .badge.observed { background: #ecfdf5; color: var(--accent); }
     .badge.inferred { background: #fff7ed; color: var(--warn); }
@@ -59,141 +71,240 @@
       color: white;
       border: 0;
       border-radius: 8px;
-      padding: 10px 16px;
+      padding: 11px 18px;
       cursor: pointer;
     }
-    button:disabled { opacity: 0.5; cursor: wait; }
-    #streams, #timeline { min-height: 180px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
-    .day { display: grid; grid-template-columns: 88px 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px dashed var(--line); }
-    .metric { font-size: 28px; font-weight: 600; }
-    .metric span { display: block; font-size: 12px; color: var(--muted); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; }
+    button:disabled { opacity: 0.55; cursor: wait; }
+    button.ghost {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      margin-left: 8px;
+    }
+    .metric {
+      font-size: 34px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      line-height: 1.35;
+    }
     .disclaimer { font-size: 13px; color: var(--muted); }
-    .receipt { font-family: ui-monospace, Menlo, monospace; font-size: 12px; white-space: pre-wrap; background: #fafaf9; padding: 10px; border-radius: 6px; }
+    .receipt {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      background: #f7f4ef;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    .cards {
+      display: grid;
+      gap: 8px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 12px;
+    }
+    .card {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: #fff;
+    }
+    .card strong { display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+    .spark { width: 100%; height: 36px; display: block; }
+    #timelineWrap { position: relative; min-height: 220px; }
+    #timelineChart { width: 100%; height: 180px; }
+    #timelineList { font-family: ui-monospace, Menlo, monospace; font-size: 11px; margin-top: 10px; max-height: 160px; overflow: auto; }
+    .day { display: grid; grid-template-columns: 88px 1fr; gap: 8px; padding: 3px 0; border-bottom: 1px dashed var(--line); }
+    .fade-in { animation: fade 0.7s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
+    .proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 13px; }
+    .proof-grid div { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+    .proof-grid b { display: block; font-size: 18px; margin-top: 4px; }
   </style>
 </head>
 <body>
   <header>
     <h1>CycleBench</h1>
     <p>
-      Scattered wearable, glucose, sleep, and symptom signals → one uncertainty-aware hormonal-state trajectory.
-      Research-only. Not a diagnosis. The model can train on our open synthetic cohort (SynthCycle) — no PHI.
+      Fragmented wearable, glucose, sleep, and symptom signals → one auditable hormonal-state trajectory.
+      Research infrastructure only — not a diagnosis. Demo participant is <b>synthetic (SynthCycle)</b>.
     </p>
   </header>
   <main>
     <div class="row">
       <section>
-        <h2>1 · The mess</h2>
-        <div id="streams">Load demo timeline to see raw streams…</div>
-        <p style="margin-top:12px">
-          <button id="btn">Reconstruct</button>
-          <span class="disclaimer">Uses <code>outputs/demo_timeline.csv</code> from <code>scripts/run_benchmark.py</code>.</span>
+        <h2>1 · Fragmented inputs</h2>
+        <div class="cards" id="streams">Loading demo_public.json…</div>
+        <p style="margin-top:14px">
+          <button id="btn">Reconstruct trajectory</button>
+          <button class="ghost" id="resetBtn" type="button">Reset</button>
         </p>
+        <p class="disclaimer" style="margin-top:8px">Video path: press Reconstruct → watch the snap → read the TSTR proof card.</p>
       </section>
       <section>
-        <h2>Headline metric</h2>
-        <div class="metric" id="headline">—<span>run the benchmark</span></div>
-        <p class="disclaimer" id="mode"></p>
+        <h2>Benchmark proof</h2>
+        <div class="metric" id="headline">—<span>loading metrics…</span></div>
+        <div class="proof-grid" id="proof"></div>
+        <p class="disclaimer" id="mode" style="margin-top:10px"></p>
       </section>
     </div>
     <section>
-      <h2>2 · The trajectory</h2>
+      <h2>2 · Reconstructed trajectory</h2>
       <p>
-        <span class="badge observed">observed</span>
-        <span class="badge inferred">inferred</span>
-        <span class="badge missing">missing</span>
+        <span class="badge observed">observed phase</span>
+        <span class="badge inferred">model-inferred</span>
+        <span class="badge missing">gap</span>
       </p>
-      <div id="timeline">Press Reconstruct.</div>
+      <div id="timelineWrap">
+        <svg id="timelineChart" viewBox="0 0 640 180" preserveAspectRatio="none"></svg>
+        <div id="timelineList">Press Reconstruct.</div>
+      </div>
     </section>
     <section>
       <h2>3 · Receipt drawer</h2>
-      <div class="receipt" id="receipt">Every displayed value links to a source column or model version.</div>
-    </section>
-    <section>
-      <h2>Symptom ingest (bounded OpenAI / heuristic)</h2>
-      <textarea id="note" rows="2" style="width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;">Exhausted with brain fog and cramps — slept poorly.</textarea>
-      <p style="margin-top:8px"><button id="symBtn" type="button">Structure symptoms</button></p>
-      <div class="receipt" id="symOut">Offline heuristic works without a key; OpenAI used only when OPENAI_API_KEY is set (ingestion only).</div>
+      <div class="receipt" id="receipt">Provenance appears after reconstruction.</div>
     </section>
   </main>
   <script>
-    let rows = [];
-    let preds = {};
+    let payload = null;
+    let reconstructed = false;
 
-    async function loadCSV(path) {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error(path + " missing — run scripts/run_benchmark.py first");
-      const text = await res.text();
-      const [header, ...lines] = text.trim().split(/\r?\n/);
-      const cols = header.split(",");
-      return lines.map(line => {
-        const vals = line.split(",");
-        const o = {};
-        cols.forEach((c, i) => o[c] = vals[i]);
-        return o;
-      });
+    const fmt = (v, d=1) => {
+      if (v === null || v === undefined || v === "" || Number.isNaN(+v)) return "·";
+      return (+v).toFixed(d);
+    };
+
+    function sparkline(values, color) {
+      const nums = values.map(v => (v === null || v === undefined || v === "" || Number.isNaN(+v) ? null : +v));
+      const known = nums.filter(v => v !== null);
+      if (!known.length) return `<svg class="spark" viewBox="0 0 120 36"></svg>`;
+      const min = Math.min(...known), max = Math.max(...known);
+      const span = (max - min) || 1;
+      const pts = nums.map((v, i) => {
+        if (v === null) return null;
+        const x = (i / Math.max(nums.length - 1, 1)) * 120;
+        const y = 30 - ((v - min) / span) * 24;
+        return `${x},${y}`;
+      }).filter(Boolean).join(" ");
+      return `<svg class="spark" viewBox="0 0 120 36"><polyline fill="none" stroke="${color}" stroke-width="2" points="${pts}" /></svg>`;
     }
 
-    function renderMess(data) {
+    function renderMess(streams) {
+      const slice = streams.slice(0, 21);
+      const series = {
+        "Heart rate": slice.map(r => r.hr_mean),
+        "CGM mean": slice.map(r => r.cgm_mean),
+        "Sleep hours": slice.map(r => r.sleep_hours),
+        "Fatigue": slice.map(r => r.symptom_fatigue),
+      };
+      const colors = ["#0f766e", "#b45309", "#1d4ed8", "#7c2d12"];
       const el = document.getElementById("streams");
-      const sample = data.slice(0, 8);
-      el.innerHTML = sample.map(r => {
-        const bits = ["hr_mean","cgm_mean","sleep_hours","symptom_fatigue","cycle_phase"]
-          .map(k => `${k}=${r[k] === "" || r[k] === undefined ? "·" : Number.isNaN(+r[k]) ? r[k] : (+r[k]).toFixed?.(1) ?? r[k]}`)
-          .join("  ");
-        return `<div class="day"><div>${r.date}</div><div>${bits}</div></div>`;
+      el.innerHTML = Object.entries(series).map(([name, vals], i) => {
+        const gaps = vals.filter(v => v === null || v === undefined || v === "" || Number.isNaN(+v)).length;
+        return `<div class="card"><strong>${name} · ${gaps} gaps / ${vals.length}d</strong>${sparkline(vals, colors[i])}</div>`;
       }).join("");
     }
 
-    function renderTimeline(data) {
-      const el = document.getElementById("timeline");
-      el.innerHTML = data.slice(0, 14).map(r => {
-        const key = r.date;
-        const pred = preds[key];
-        const phase = pred ? pred : r.cycle_phase;
-        const status = pred ? "inferred" : (r.cycle_phase ? "observed" : "missing");
-        return `<div class="day"><div>${r.date}</div><div><span class="badge ${status}">${status}</span> phase=<b>${phase}</b> · hr=${r.hr_mean || "·"} · cgm=${r.cgm_mean || "·"} · fatigue=${r.symptom_fatigue || "·"}</div></div>`;
+    function phaseColor(p) {
+      return ({ menstrual: "#b45309", follicular: "#0f766e", ovulatory: "#1d4ed8", luteal: "#7c2d12" }[p] || "#a8a29e");
+    }
+
+    function renderTimeline(streams, predictions) {
+      const predMap = {};
+      (predictions || []).forEach(p => { predMap[p.date] = p.y_pred; });
+      const slice = streams.slice(0, 28);
+      const w = 640, h = 180, pad = 16;
+      const phases = ["menstrual", "follicular", "ovulatory", "luteal"];
+      const yOf = (p) => pad + phases.indexOf(p) * ((h - 2 * pad) / 3);
+
+      let dots = "";
+      slice.forEach((r, i) => {
+        const x = pad + (i / Math.max(slice.length - 1, 1)) * (w - 2 * pad);
+        const obs = r.cycle_phase;
+        const inf = predMap[r.date];
+        if (obs) {
+          dots += `<circle cx="${x}" cy="${yOf(obs)}" r="4.5" fill="${phaseColor(obs)}" opacity="0.95" />`;
+        } else {
+          dots += `<circle cx="${x}" cy="${h/2}" r="3" fill="#a8a29e" />`;
+        }
+        if (inf) {
+          dots += `<circle cx="${x}" cy="${yOf(inf)}" r="7" fill="none" stroke="${phaseColor(inf)}" stroke-width="2" stroke-dasharray="3 2" opacity="0.85" />`;
+        }
+      });
+      const labels = phases.map((p, i) =>
+        `<text x="8" y="${yOf(p) + 4}" font-size="10" fill="#78716c" font-family="ui-sans-serif,system-ui">${p.slice(0,3)}</text>`
+      ).join("");
+      document.getElementById("timelineChart").innerHTML = labels + dots;
+      document.getElementById("timelineChart").classList.add("fade-in");
+
+      document.getElementById("timelineList").innerHTML = slice.slice(0, 12).map(r => {
+        const inf = predMap[r.date];
+        const status = inf ? "inferred" : (r.cycle_phase ? "observed" : "missing");
+        const phase = inf || r.cycle_phase || "·";
+        return `<div class="day"><div>${r.date}</div><div><span class="badge ${status}">${status}</span> phase=<b>${phase}</b> · hr=${fmt(r.hr_mean)} · cgm=${fmt(r.cgm_mean)} · fatigue=${fmt(r.symptom_fatigue)}</div></div>`;
       }).join("");
-      document.getElementById("receipt").textContent =
-        JSON.stringify({
-          participant_id: data[0]?.participant_id,
-          model: "baseline.joblib (GBM)",
-          target: "cycle_phase",
-          source: data[0]?.source,
-          license_tag: data[0]?.license_tag,
-          note: "Research state estimate — not a diagnosis.",
-        }, null, 2);
+
+      document.getElementById("receipt").textContent = JSON.stringify({
+        participant_id: payload.participant_id,
+        model: payload.model_version,
+        source: "synthetic",
+        license_tag: "MIT-synthetic-no-PHI",
+        synth_fitted_from: payload.synth_fitted_from,
+        note: "Research state estimate — not a diagnosis.",
+        disclaimer: payload.disclaimer,
+      }, null, 2);
+    }
+
+    function renderProof(m) {
+      const ba = m.balanced_accuracy != null ? (+m.balanced_accuracy).toFixed(3) : "—";
+      document.getElementById("headline").innerHTML =
+        `${ba}<span>${m.headline || ""}</span>`;
+      const split = payload.split_real || {};
+      document.getElementById("proof").innerHTML = `
+        <div>Protocol<b>${m.protocol || "—"}</b></div>
+        <div>vs naive<b>${m.beats_naive != null ? "+" + (+m.beats_naive).toFixed(3) : "—"}</b></div>
+        <div>% of TRTR<b>${m.pct_of_trtr != null ? Math.round(+m.pct_of_trtr * 100) + "%" : "—"}</b></div>
+        <div>Real split<b>${split.train || "—"} / ${split.val || "—"} / ${split.test || "—"}</b></div>`;
+      document.getElementById("mode").textContent =
+        `Open cohort: SynthCycle · ${payload.synth_fitted_from || ""} · restricted clinical rows not redistributed`;
     }
 
     async function init() {
       try {
-        rows = await loadCSV("../outputs/demo_timeline.csv");
-        renderMess(rows);
-        try {
-          const p = await loadCSV("../outputs/demo_predictions.csv");
-          p.forEach(r => { preds[r.date] = r.y_pred; });
-        } catch (_) {}
-        try {
-          const m = await fetch("../outputs/latest_metrics.json").then(r => r.json());
-          document.getElementById("headline").innerHTML =
-            `${(m.headline?.tstr ?? m.headline?.naive ?? "—")}<span>${m.headline?.headline || m.mode}</span>`;
-          document.getElementById("mode").textContent = `mode=${m.mode} · target=${m.task?.target}`;
-        } catch (_) {}
+        const res = await fetch("../outputs/demo_public.json");
+        if (!res.ok) throw new Error("demo_public.json missing — run scripts/run_benchmark.py");
+        payload = await res.json();
+        renderMess(payload.streams || []);
+        renderProof(payload.metrics || {});
+        document.getElementById("timelineList").textContent = "Press Reconstruct to snap chaos → trajectory.";
       } catch (e) {
         document.getElementById("streams").textContent = e.message;
       }
     }
 
-    document.getElementById("btn").onclick = () => renderTimeline(rows);
-    document.getElementById("symBtn").onclick = () => {
-      const t = document.getElementById("note").value.toLowerCase();
-      const score = (words) => Math.min(3, words.filter(w => t.includes(w)).length);
-      const out = {
-        symptom_fatigue: score(["fatigue","tired","exhausted","brain fog","slept"]),
-        symptom_mood: score(["anxious","irritable","sad","mood"]),
-        symptom_pain: score(["cramp","pain","ache","migraine"]),
-        method: "browser-heuristic",
-      };
-      document.getElementById("symOut").textContent = JSON.stringify(out, null, 2);
+    document.getElementById("btn").onclick = async () => {
+      const btn = document.getElementById("btn");
+      btn.disabled = true;
+      btn.textContent = "Reconstructing…";
+      await new Promise(r => setTimeout(r, 700));
+      renderTimeline(payload.streams || [], payload.predictions || []);
+      reconstructed = true;
+      btn.disabled = false;
+      btn.textContent = "Reconstruct trajectory";
+    };
+    document.getElementById("resetBtn").onclick = () => {
+      document.getElementById("timelineChart").innerHTML = "";
+      document.getElementById("timelineList").textContent = "Press Reconstruct to snap chaos → trajectory.";
+      document.getElementById("receipt").textContent = "Provenance appears after reconstruction.";
     };
     init();
   </script>

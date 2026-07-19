@@ -5,7 +5,7 @@
     "kind": "categorical",
     "note": "Research-only. Not a diagnosis."
   },
-  "synth_fitted_from": "mcphases_train_stats",
+  "synth_fitted_from": "mcphases_train_stats_correlated",
   "splits_synth_prior": {
     "train": 14,
     "val": 5,
@@ -20,18 +20,18 @@
     "n_rows": 7200,
     "n_participants": 120,
     "per_column_missing_rate": {
-      "hr_mean": 0.07597222222222222,
-      "hrv_rmssd": 0.08027777777777778,
-      "steps": 0.07847222222222222,
-      "sleep_hours": 0.07527777777777778,
-      "sleep_efficiency": 0.08027777777777778,
-      "cgm_mean": 0.08180555555555556,
-      "cgm_std": 0.08722222222222223,
-      "symptom_fatigue": 0.08138888888888889,
-      "symptom_mood": 0.07625,
-      "symptom_pain": 0.08736111111111111
+      "hr_mean": 0.08,
+      "hrv_rmssd": 0.08222222222222222,
+      "steps": 0.08486111111111111,
+      "sleep_hours": 0.07791666666666666,
+      "sleep_efficiency": 0.07680555555555556,
+      "cgm_mean": 0.08041666666666666,
+      "cgm_std": 0.0775,
+      "symptom_fatigue": 0.0763888888888889,
+      "symptom_mood": 0.07958333333333334,
+      "symptom_pain": 0.08222222222222222
     },
-    "mean_missing_rate": 0.08043055555555556
+    "mean_missing_rate": 0.07979166666666666
   },
   "tsts": {
     "kind": "categorical",
@@ -56,10 +56,10 @@
   "tstr": {
     "kind": "categorical",
     "n": 984,
-    "macro_f1": 0.24748555948518391,
-    "balanced_accuracy": 0.2887577544477934,
-    "accuracy": 0.31808943089430897,
-    "ece": 0.40386473919247007
+    "macro_f1": 0.2724859775467726,
+    "balanced_accuracy": 0.29502932919366137,
+    "accuracy": 0.2784552845528455,
+    "ece": 0.42490227969353855
   },
   "trtr": {
     "kind": "categorical",
@@ -77,19 +77,19 @@
     "accuracy": 0.3363821138211382
   },
   "delta_tstr": {
-    "delta_macro_f1": 0.12163004617719914,
-    "delta_balanced_accuracy": 0.03875775444779339,
-    "delta_accuracy": -0.01829268292682923
+    "delta_macro_f1": 0.14663046423878784,
+    "delta_balanced_accuracy": 0.04502932919366137,
+    "delta_accuracy": -0.05792682926829268
   },
   "headline": {
     "primary_metric": "balanced_accuracy",
     "protocol": "TSTR",
-    "tstr": 0.2887577544477934,
+    "tstr": 0.29502932919366137,
     "naive": 0.25,
     "trtr": 0.32847421080323597,
-    "beats_naive": 0.03875775444779339,
-    "pct_of_trtr": 0.8790880530367308,
-    "headline": "TSTR balanced_accuracy=0.289 (+0.039 vs naive, 88% of TRTR)"
+    "beats_naive": 0.04502932919366137,
+    "pct_of_trtr": 0.898181103692159,
+    "headline": "TSTR balanced_accuracy=0.295 (+0.045 vs naive, 90% of TRTR)"
   },
   "mode": "TSTR"
 }

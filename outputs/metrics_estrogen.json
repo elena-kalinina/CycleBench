@@ -1,0 +1,34 @@
+{
+  "task": "estrogen_reconstruction",
+  "features": "multimodal + cycle_day (legitimate for hormone level; not phase label leakage)",
+  "note": "Research-only. Not a diagnosis.",
+  "tstr": {
+    "kind": "continuous",
+    "n": 862,
+    "mae": 92.12422617125333,
+    "rmse": 135.05898127849596
+  },
+  "trtr": {
+    "kind": "continuous",
+    "n": 862,
+    "mae": 93.1691989609207,
+    "rmse": 136.58072074078152
+  },
+  "naive": {
+    "kind": "continuous",
+    "n": 862,
+    "mae": 79.57039323155004,
+    "rmse": 121.48558093671765
+  },
+  "headline": {
+    "primary_metric": "mae",
+    "protocol": "TSTR",
+    "tstr": 92.12422617125333,
+    "naive": 79.57039323155004,
+    "trtr": 93.1691989609207,
+    "beats_naive": -12.553832939703284,
+    "pct_of_trtr": 1.0113430834981976,
+    "headline": "TSTR mae=92.124 (-12.554 vs naive; lower MAE better)"
+  },
+  "n_test_windows": 862
+}

@@ -158,7 +158,8 @@ def adapt(root: Path | None = None) -> pd.DataFrame:
         )
 
     hormones = pd.read_csv(root / "hormones_and_selfreport.csv")
-    spine = hormones[JOIN_KEYS + ["phase", "fatigue", "moodswing", "cramps"]].copy()
+    spine_cols = JOIN_KEYS + ["phase", "fatigue", "moodswing", "cramps", "estrogen", "lh"]
+    spine = hormones[spine_cols].copy()
     spine["cycle_phase"] = _map_phase(spine["phase"])
     spine = spine.dropna(subset=["cycle_phase"])
     spine = spine[spine["cycle_phase"].isin(PHASE_LABELS)]
@@ -166,6 +167,9 @@ def adapt(root: Path | None = None) -> pd.DataFrame:
     spine["symptom_fatigue"] = _likert(spine["fatigue"])
     spine["symptom_mood"] = _likert(spine["moodswing"])
     spine["symptom_pain"] = _likert(spine["cramps"])
+    # Optional research targets (not in required FEATURE_COLUMNS; continuous reconstruction)
+    spine["estrogen"] = pd.to_numeric(spine["estrogen"], errors="coerce")
+    spine["lh"] = pd.to_numeric(spine["lh"], errors="coerce")
 
     # Wearable / CGM daily aggs (lean set — skip 2GB heart_rate.csv)
     hr = _daily_mean(root / "resting_heart_rate.csv", "value", "hr_mean")
@@ -217,6 +221,8 @@ def adapt(root: Path | None = None) -> pd.DataFrame:
             "symptom_fatigue",
             "symptom_mood",
             "symptom_pain",
+            "estrogen",
+            "lh",
             "source",
             "license_tag",
         ]
